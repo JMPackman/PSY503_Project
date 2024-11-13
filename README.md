@@ -1,6 +1,4 @@
 # PSY503_Project
 PSY503 Final Project
 
-**bold**
-
-__italics__
+This is my project.
