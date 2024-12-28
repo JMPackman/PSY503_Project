@@ -1,0 +1,2140 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  doc,draftall]{apa6}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+\ifLuaTeX
+\usepackage[bidi=basic]{babel}
+\else
+\usepackage[bidi=default]{babel}
+\fi
+\babelprovide[main,import]{english}
+% get rid of language-specific shorthands (see #6817):
+\let\LanguageShortHands\languageshorthands
+\def\languageshorthands#1{}
+% Manuscript styling
+\usepackage{upgreek}
+\captionsetup{font=singlespacing,justification=justified}
+
+% Table formatting
+\usepackage{longtable}
+\usepackage{lscape}
+% \usepackage[counterclockwise]{rotating}   % Landscape page setup for large tables
+\usepackage{multirow}		% Table styling
+\usepackage{tabularx}		% Control Column width
+\usepackage[flushleft]{threeparttable}	% Allows for three part tables with a specified notes section
+\usepackage{threeparttablex}            % Lets threeparttable work with longtable
+
+% Create new environments so endfloat can handle them
+% \newenvironment{ltable}
+%   {\begin{landscape}\centering\begin{threeparttable}}
+%   {\end{threeparttable}\end{landscape}}
+\newenvironment{lltable}{\begin{landscape}\centering\begin{ThreePartTable}}{\end{ThreePartTable}\end{landscape}}
+
+% Enables adjusting longtable caption width to table width
+% Solution found at http://golatex.de/longtable-mit-caption-so-breit-wie-die-tabelle-t15767.html
+\makeatletter
+\newcommand\LastLTentrywidth{1em}
+\newlength\longtablewidth
+\setlength{\longtablewidth}{1in}
+\newcommand{\getlongtablewidth}{\begingroup \ifcsname LT@\roman{LT@tables}\endcsname \global\longtablewidth=0pt \renewcommand{\LT@entry}[2]{\global\advance\longtablewidth by ##2\relax\gdef\LastLTentrywidth{##2}}\@nameuse{LT@\roman{LT@tables}} \fi \endgroup}
+
+% \setlength{\parindent}{0.5in}
+% \setlength{\parskip}{0pt plus 0pt minus 0pt}
+
+% Overwrite redefinition of paragraph and subparagraph by the default LaTeX template
+% See https://github.com/crsh/papaja/issues/292
+\makeatletter
+\renewcommand{\paragraph}{\@startsection{paragraph}{4}{\parindent}%
+  {0\baselineskip \@plus 0.2ex \@minus 0.2ex}%
+  {-1em}%
+  {\normalfont\normalsize\bfseries\itshape\typesectitle}}
+
+\renewcommand{\subparagraph}[1]{\@startsection{subparagraph}{5}{1em}%
+  {0\baselineskip \@plus 0.2ex \@minus 0.2ex}%
+  {-\z@\relax}%
+  {\normalfont\normalsize\itshape\hspace{\parindent}{#1}\textit{\addperi}}{\relax}}
+\makeatother
+
+\makeatletter
+\usepackage{etoolbox}
+\patchcmd{\maketitle}
+  {\section{\normalfont\normalsize\abstractname}}
+  {\section*{\normalfont\normalsize\abstractname}}
+  {}{\typeout{Failed to patch abstract.}}
+\patchcmd{\maketitle}
+  {\section{\protect\normalfont{\@title}}}
+  {\section*{\protect\normalfont{\@title}}}
+  {}{\typeout{Failed to patch title.}}
+\makeatother
+
+\usepackage{xpatch}
+\makeatletter
+\xapptocmd\appendix
+  {\xapptocmd\section
+    {\addcontentsline{toc}{section}{\appendixname\ifoneappendix\else~\theappendix\fi: #1}}
+    {}{\InnerPatchFailed}%
+  }
+{}{\PatchFailed}
+\makeatother
+\keywords{Antisemitism, stereotype content model (SCM), dehumanization, implicit attitudes, trust game\newline\indent Word count: X}
+\usepackage{csquotes}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Antisemitic Stereotypes: Theory, Measurement, and Behavior},
+  pdfauthor={James Packman1, Susan Fiske1, \& Joel Cooper1},
+  pdflang={en-EN},
+  pdfkeywords={Antisemitism, stereotype content model (SCM), dehumanization, implicit attitudes, trust game},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Antisemitic Stereotypes: Theory, Measurement, and Behavior}
+\author{James Packman\textsuperscript{1}, Susan Fiske\textsuperscript{1}, \& Joel Cooper\textsuperscript{1}}
+\date{}
+
+
+\shorttitle{Scale of Antisemitic Stereotypes}
+
+\authornote{
+
+Princeton University, Department of Psychology.
+IRB 13242; 13450; 17505. The authors have no conflict of interest to report. Funding was generously provided by the Princeton University's Department of Psychology, the Office of Undergraduate Research (OUR), and the Class of 1955 Senior Thesis Fund.
+
+The authors made the following contributions. James Packman: Conceptualization, Writing - Original Draft Preparation, Investigation, Data Curation, Validation, Visualization, Software; Susan Fiske: Writing - Review \& Editing, Supervision, Project Administration, Methodology; Joel Cooper: Writing - Review \& Editing, Supervision, Methodology.
+
+Correspondence concerning this article should be addressed to James Packman, 40 Woodlands Way, Princeton, NJ 08540. E-mail: \href{mailto:packman@princeton.edu}{\nolinkurl{packman@princeton.edu}}
+
+}
+
+\affiliation{\vspace{0.5cm}\textsuperscript{1} Princeton University}
+
+\abstract{%
+Data-driven antisemitism scales originated decades ago, but the field lacks current, theory-driven, validated measures of prejudices against Jewish people. The Scale of Antisemitic Stereotypes (SASS) updates methods and fits the Stereotype Content Model (SCM; Fiske, Cuddy, Glick, \& Xu, 2002), which explains contemporary antisemitism in the United States as envious prejudice toward stereotypically high-competence, low-warmth Jews. American participants spontaneously generated excessive-competence and negative-warmth (e.g., ``untrustworthy'') stereotypes. Exploratory and confirmatory factor analyses demonstrated a two-factor structure of warmth and competence. SASS scores correlated with right-wing authoritarianism, social dominance orientation, political conservatism, anti-Black racism, and anti-Asian-American stereotypes. SASS scores predicted implicitly associating Jews and low warmth, blatantly dehumanizing Jews, and systematically overestimating numbers of Jewish professionals. SASS predicts specific, relevant behavior: Participants who stereotyped Jews as low in warmth shared less with them in trust games. SASS not only advances basic science but also could guide interventions against antisemitism.
+}
+
+
+
+\begin{document}
+\maketitle
+
+\section{Study 6}\label{study-6}
+
+The goals of study 6 are to determine (1) whether the 9-item SASS demonstrates a two-factor structure (warmth and competence) via confirmatory factor analysis (CFA), (2) whether SASS warmth and competence scores each predict different behaviors in economic games, (3) whether SASS scores can be experimentally manipulated via altering participants' perceptions of the entitativity of Jews in the U.S., and (4) whether warmth and competence stereotypes moderate the relationship between perceptions of entitativity and economic game behavior.
+Study 4's exploratory factor analysis demonstrated that the 9-item SASS was comprised of two latent factors: warmth (e.g., ``All things considered, Jewish people are untrustworthy''), and competence (e.g., Jewish people tend to be good with money). Study 6 uses CFA to confirm this factor structure with a new sample.
+The results of study 5 demonstrated that warmth-related antisemitic stereotypes, but not competence stereotypes, predicted trust game behavior. In study 6, we attempt not only to replicate this result, but also to demonstrate that competence-related antisemitic stereotypes uniquely predict behavior in a competence-relevant economic game situation. In the ``puzzle game,'' participants are monetarily incentivized to guess how many puzzles their co-player will solve. Accurately guessing requires judging one's co-player's competence (i.e., their ability to solve the puzzles, and the agency to do so), but not warmth. Thus, we hypothesize that, in the puzzle game, participants' competence-related antisemitic stereotype endorsement will predict higher estimates of Jewish co-players' puzzle-solving.
+Thus far, we have treated SASS scores as an individual difference measure. In study 6, we attempt to affect SASS scores via an experimental manipulation. Entitativity, the extent to which a group is seen as a unified, homogeneous, cohesive whole (see Yzerbyt et al., 2004 for an overview) predicts viewing that group as powerful and threatening (Deprét \& Fiske, 1999). Perceiving a group as highly entitative, which occurs when symbols or logos depict them, predicts viewing that group as more competent but less warm (Callahan \& Ledgerwood, 2016). Experimentally manipulating entitativity by depicting group members as more homogeneous and unified exaggerates stereotype endorsements for disliked outgroups (Dang et al., 2018). That is, when people perceive an envied outgroup as more entitative (as opposed to dissimilar or diffuse), they will rate that group as less warm and more competent. Consequently, we hypothesize that experimentally heightening participants' perceptions of U.S. Jews' entitativity will increase their endorsement of low-warmth and excessive-competence stereotypes.
+It follows that we hypothesize that warmth and competence stereotype endorsement should moderate the relationships between entitativity perceptions and trust game and puzzle game behavior, respectively. That is, when U.S. Jews are depicted as more entitative, relative to when they are depicted as less entitative, participants will view them as less warm but more competent. Participants will then trust them less in the trust game and guess they will solve more puzzles. We hypothesize that, conditioned on perceived entitativity, wamrth and competence stereotype endorsements will predict participants' trust and puzzle game behaviors, respectively. We simulate this interaction in the figure below.
+
+\includegraphics{Packman_Final_Project_files/figure-latex/unnamed-chunk-1-1.pdf}
+
+\begin{table}[tbp]
+
+\begin{center}
+\begin{threeparttable}
+
+\caption{\label{tab:unnamed-chunk-1}}
+
+\begin{tabular}{llll}
+\toprule
+x1 & \multicolumn{1}{c}{x2} & \multicolumn{1}{c}{y} & \multicolumn{1}{c}{x1x2}\\
+\midrule
+-1.01 & -1.60 & 0.60 & 1.62\\
+-1.01 & -0.13 & 0.30 & 0.14\\
+-1.01 & -1.65 & 0.36 & 1.66\\
+0.99 & 0.96 & 1.00 & 0.95\\
+0.99 & -1.37 & -0.52 & -1.35\\
+0.99 & 1.00 & 0.88 & 0.99\\
+0.99 & 0.28 & -2.65 & 0.27\\
+0.99 & 0.39 & 0.42 & 0.39\\
+0.99 & 2.07 & 2.28 & 2.05\\
+0.99 & -0.81 & -0.35 & -0.80\\
+-1.01 & -0.92 & -0.19 & 0.93\\
+0.99 & -0.03 & 0.87 & -0.03\\
+0.99 & 0.74 & 0.01 & 0.73\\
+-1.01 & -1.41 & 0.15 & 1.42\\
+-1.01 & -2.08 & -0.15 & 2.11\\
+-1.01 & -1.21 & -0.27 & 1.22\\
+-1.01 & 0.16 & 0.96 & -0.16\\
+0.99 & 0.98 & -0.63 & 0.96\\
+-1.01 & -0.56 & 1.29 & 0.56\\
+-1.01 & -1.06 & -0.63 & 1.08\\
+-1.01 & -1.15 & 0.24 & 1.16\\
+0.99 & 1.07 & 0.81 & 1.06\\
+-1.01 & 1.30 & 0.74 & -1.31\\
+-1.01 & -0.35 & -0.32 & 0.35\\
+-1.01 & -0.67 & -0.10 & 0.67\\
+0.99 & 0.61 & 1.05 & 0.60\\
+-1.01 & 0.78 & 0.38 & -0.79\\
+-1.01 & 0.28 & 0.26 & -0.28\\
+-1.01 & -0.56 & 0.32 & 0.56\\
+-1.01 & -1.81 & -0.58 & 1.83\\
+-1.01 & -1.49 & 1.50 & 1.50\\
+0.99 & 0.50 & 0.24 & 0.50\\
+-1.01 & -1.22 & 0.06 & 1.23\\
+-1.01 & -0.94 & 0.33 & 0.95\\
+0.99 & 1.25 & 1.22 & 1.23\\
+-1.01 & -0.79 & 0.17 & 0.80\\
+-1.01 & -0.73 & -1.51 & 0.73\\
+0.99 & -0.24 & -0.63 & -0.24\\
+0.99 & 0.47 & 0.26 & 0.46\\
+-1.01 & -1.25 & 1.34 & 1.27\\
+0.99 & 1.34 & 1.23 & 1.32\\
+-1.01 & -1.65 & 0.05 & 1.67\\
+-1.01 & -0.17 & -0.35 & 0.18\\
+0.99 & 1.90 & 2.23 & 1.87\\
+0.99 & 0.26 & -0.13 & 0.26\\
+0.99 & -0.51 & -0.82 & -0.50\\
+-1.01 & -0.74 & 0.71 & 0.75\\
+-1.01 & -1.13 & 0.13 & 1.14\\
+0.99 & 0.57 & -1.25 & 0.56\\
+0.99 & -0.63 & -1.15 & -0.62\\
+-1.01 & 1.00 & 0.51 & -1.01\\
+-1.01 & -0.03 & 0.04 & 0.03\\
+-1.01 & -2.12 & 1.14 & 2.14\\
+-1.01 & -0.71 & -0.40 & 0.71\\
+0.99 & -0.09 & -0.14 & -0.09\\
+0.99 & -0.38 & 0.99 & -0.38\\
+0.99 & -0.19 & -2.10 & -0.18\\
+-1.01 & 0.80 & 0.02 & -0.81\\
+0.99 & 0.91 & -0.94 & 0.90\\
+0.99 & 1.73 & 0.07 & 1.71\\
+0.99 & 1.44 & 2.10 & 1.42\\
+-1.01 & -0.84 & 0.45 & 0.84\\
+0.99 & -1.49 & -1.70 & -1.47\\
+-1.01 & 0.48 & -0.64 & -0.48\\
+-1.01 & -1.13 & -0.59 & 1.14\\
+0.99 & 0.91 & 1.15 & 0.90\\
+0.99 & 0.16 & -0.25 & 0.16\\
+0.99 & 0.35 & -0.16 & 0.35\\
+-1.01 & -0.53 & 0.64 & 0.54\\
+0.99 & 1.66 & -0.02 & 1.63\\
+-1.01 & -0.82 & -1.19 & 0.83\\
+-1.01 & 0.50 & -0.24 & -0.50\\
+-1.01 & -0.66 & -1.28 & 0.67\\
+-1.01 & 0.59 & -0.08 & -0.59\\
+-1.01 & -0.37 & -0.85 & 0.37\\
+0.99 & 1.26 & 1.19 & 1.25\\
+-1.01 & -2.58 & 0.04 & 2.61\\
+-1.01 & 1.14 & -1.78 & -1.15\\
+-1.01 & -0.62 & -0.50 & 0.63\\
+-1.01 & 0.78 & 0.53 & -0.79\\
+0.99 & -0.13 & 0.51 & -0.13\\
+0.99 & 0.68 & -0.59 & 0.67\\
+-1.01 & -0.41 & -0.15 & 0.41\\
+0.99 & 1.77 & 0.98 & 1.75\\
+-1.01 & 0.09 & 1.14 & -0.09\\
+0.99 & 1.11 & 0.56 & 1.10\\
+0.99 & 0.07 & -1.21 & 0.07\\
+-1.01 & -0.66 & -0.98 & 0.67\\
+0.99 & 1.46 & 2.71 & 1.44\\
+-1.01 & 0.86 & 2.02 & -0.87\\
+-1.01 & -0.50 & -0.97 & 0.51\\
+-1.01 & -1.61 & -0.34 & 1.63\\
+0.99 & -0.31 & -1.68 & -0.31\\
+0.99 & -0.18 & -1.32 & -0.17\\
+0.99 & 0.25 & 0.88 & 0.24\\
+-1.01 & -0.97 & 0.69 & 0.98\\
+-1.01 & -2.17 & -1.27 & 2.19\\
+0.99 & 0.14 & 0.85 & 0.14\\
+0.99 & 1.21 & 0.57 & 1.19\\
+0.99 & 0.66 & -0.08 & 0.65\\
+-1.01 & -1.81 & -1.82 & 1.83\\
+-1.01 & -1.35 & -1.89 & 1.37\\
+-1.01 & -1.09 & 0.89 & 1.10\\
+0.99 & 0.84 & -0.10 & 0.83\\
+-1.01 & -0.31 & -1.57 & 0.32\\
+0.99 & -0.31 & 0.27 & -0.30\\
+0.99 & 0.24 & -0.93 & 0.23\\
+0.99 & -1.04 & 0.01 & -1.02\\
+0.99 & 1.45 & 0.70 & 1.43\\
+0.99 & 0.43 & 0.72 & 0.42\\
+-1.01 & -0.20 & 0.30 & 0.20\\
+0.99 & -0.03 & -0.99 & -0.03\\
+0.99 & -1.37 & -1.04 & -1.36\\
+0.99 & 1.60 & -0.90 & 1.58\\
+0.99 & 1.15 & 2.09 & 1.14\\
+0.99 & 0.65 & 0.69 & 0.64\\
+0.99 & 1.26 & -0.27 & 1.25\\
+0.99 & -1.77 & 0.24 & -1.74\\
+-1.01 & -0.19 & 0.32 & 0.20\\
+0.99 & 0.17 & 1.46 & 0.17\\
+0.99 & -1.49 & 0.64 & -1.47\\
+-1.01 & 0.38 & -0.64 & -0.38\\
+-1.01 & -0.38 & 0.58 & 0.39\\
+0.99 & 0.42 & 1.02 & 0.41\\
+-1.01 & -1.16 & -1.03 & 1.17\\
+-1.01 & -1.09 & -1.24 & 1.11\\
+0.99 & 0.53 & -0.71 & 0.53\\
+0.99 & 1.40 & -0.64 & 1.38\\
+0.99 & 0.64 & 1.03 & 0.63\\
+0.99 & 2.42 & 1.42 & 2.39\\
+0.99 & 0.23 & -0.91 & 0.22\\
+0.99 & 0.04 & 0.50 & 0.04\\
+0.99 & 1.21 & 1.63 & 1.19\\
+-1.01 & -0.24 & -0.33 & 0.24\\
+0.99 & -1.28 & 0.05 & -1.26\\
+0.99 & 1.62 & -0.41 & 1.60\\
+0.99 & 0.59 & -0.16 & 0.59\\
+0.99 & 0.77 & 1.50 & 0.76\\
+-1.01 & 0.49 & -0.35 & -0.50\\
+0.99 & -0.85 & -1.57 & -0.84\\
+0.99 & 0.63 & -0.05 & 0.63\\
+0.99 & -0.53 & -0.36 & -0.53\\
+0.99 & 0.48 & -0.78 & 0.47\\
+-1.01 & 1.40 & -0.44 & -1.41\\
+-1.01 & 1.33 & -0.98 & -1.34\\
+0.99 & 1.03 & 1.52 & 1.01\\
+-1.01 & -0.71 & 0.09 & 0.72\\
+-1.01 & -0.90 & 0.27 & 0.91\\
+-1.01 & -0.90 & -1.43 & 0.91\\
+0.99 & -0.56 & -0.20 & -0.55\\
+-1.01 & 0.59 & -0.26 & -0.59\\
+-1.01 & 0.44 & 0.05 & -0.45\\
+0.99 & 0.84 & -1.91 & 0.83\\
+0.99 & 1.23 & 0.64 & 1.21\\
+0.99 & 1.68 & 1.67 & 1.66\\
+-1.01 & -1.48 & -0.83 & 1.50\\
+-1.01 & -1.03 & 0.53 & 1.04\\
+-1.01 & 1.27 & 0.06 & -1.28\\
+-1.01 & 0.81 & 0.16 & -0.81\\
+-1.01 & 1.37 & 0.72 & -1.39\\
+-1.01 & -2.23 & -0.99 & 2.25\\
+0.99 & 0.52 & -0.20 & 0.51\\
+0.99 & -0.21 & 0.84 & -0.21\\
+0.99 & 0.31 & 2.15 & 0.31\\
+-1.01 & -0.33 & -2.54 & 0.34\\
+-1.01 & -1.22 & -1.37 & 1.24\\
+0.99 & 1.89 & 1.43 & 1.87\\
+-1.01 & -0.54 & 0.14 & 0.55\\
+0.99 & 0.49 & 0.88 & 0.49\\
+0.99 & 0.82 & 0.08 & 0.81\\
+0.99 & 0.99 & -0.39 & 0.98\\
+-1.01 & -0.68 & -0.64 & 0.69\\
+-1.01 & -0.17 & 0.04 & 0.17\\
+-1.01 & 0.99 & -1.03 & -1.00\\
+-1.01 & -0.60 & 0.17 & 0.61\\
+0.99 & 0.09 & 1.03 & 0.09\\
+-1.01 & 0.46 & -0.70 & -0.47\\
+-1.01 & -1.91 & -0.17 & 1.93\\
+-1.01 & 0.06 & -2.37 & -0.06\\
+-1.01 & 0.61 & -0.35 & -0.61\\
+-1.01 & 0.85 & 0.77 & -0.86\\
+-1.01 & -1.11 & -0.55 & 1.12\\
+-1.01 & 0.82 & 2.98 & -0.83\\
+-1.01 & 0.24 & -1.13 & -0.24\\
+-1.01 & -1.48 & -0.25 & 1.49\\
+0.99 & 0.45 & 0.57 & 0.45\\
+-1.01 & -0.39 & 0.51 & 0.39\\
+-1.01 & -1.63 & 0.20 & 1.64\\
+-1.01 & -2.53 & -0.97 & 2.56\\
+0.99 & 0.71 & -0.40 & 0.70\\
+0.99 & 1.55 & 0.35 & 1.53\\
+-1.01 & -1.03 & 0.50 & 1.04\\
+-1.01 & -1.56 & -0.44 & 1.57\\
+0.99 & -0.90 & 0.42 & -0.89\\
+-1.01 & -0.12 & -1.31 & 0.12\\
+0.99 & 0.61 & 1.18 & 0.60\\
+-1.01 & -0.43 & -0.02 & 0.44\\
+0.99 & -0.79 & 0.21 & -0.78\\
+0.99 & 0.32 & 0.25 & 0.32\\
+0.99 & -0.55 & 0.47 & -0.54\\
+0.99 & -0.36 & 0.98 & -0.36\\
+-1.01 & -1.63 & -1.19 & 1.64\\
+-1.01 & -1.68 & 1.17 & 1.69\\
+-1.01 & -0.66 & 1.31 & 0.66\\
+-1.01 & -0.02 & -0.97 & 0.02\\
+0.99 & 0.13 & 0.76 & 0.13\\
+0.99 & 0.82 & 1.66 & 0.81\\
+-1.01 & -1.48 & -2.56 & 1.49\\
+-1.01 & 0.77 & 0.76 & -0.78\\
+-1.01 & 0.39 & -0.46 & -0.40\\
+-1.01 & 0.27 & -1.82 & -0.27\\
+0.99 & 0.81 & 0.48 & 0.80\\
+0.99 & -0.59 & 0.67 & -0.59\\
+-1.01 & -1.52 & -0.24 & 1.53\\
+-1.01 & 0.05 & -1.49 & -0.05\\
+0.99 & -1.37 & -2.28 & -1.35\\
+-1.01 & 0.30 & 0.90 & -0.31\\
+0.99 & 1.96 & 0.58 & 1.93\\
+-1.01 & -0.88 & 0.13 & 0.88\\
+-1.01 & -0.79 & -2.11 & 0.80\\
+0.99 & 1.76 & 0.54 & 1.73\\
+0.99 & 0.62 & 0.63 & 0.61\\
+-1.01 & -1.60 & -0.87 & 1.62\\
+0.99 & 2.24 & 1.03 & 2.21\\
+-1.01 & 1.64 & 1.03 & -1.66\\
+0.99 & -0.45 & 1.45 & -0.44\\
+0.99 & 0.49 & 1.43 & 0.48\\
+0.99 & -0.19 & -0.70 & -0.19\\
+-1.01 & -1.05 & -1.29 & 1.06\\
+0.99 & 0.10 & -0.21 & 0.10\\
+0.99 & 0.55 & -1.10 & 0.54\\
+0.99 & 0.34 & -1.14 & 0.34\\
+0.99 & 1.26 & 0.39 & 1.24\\
+0.99 & 0.38 & -2.59 & 0.37\\
+0.99 & 0.15 & 1.65 & 0.15\\
+0.99 & 0.37 & 1.21 & 0.37\\
+0.99 & 0.86 & 0.44 & 0.85\\
+-1.01 & -0.84 & -0.04 & 0.85\\
+-1.01 & -0.21 & 1.61 & 0.21\\
+0.99 & 0.98 & 1.32 & 0.97\\
+0.99 & 1.95 & 1.33 & 1.92\\
+-1.01 & 0.59 & -0.60 & -0.59\\
+-1.01 & 0.03 & 0.12 & -0.03\\
+0.99 & 0.86 & 1.02 & 0.85\\
+0.99 & -0.07 & 1.04 & -0.07\\
+-1.01 & 0.19 & -0.79 & -0.19\\
+-1.01 & -0.18 & 0.65 & 0.19\\
+0.99 & -0.82 & 1.17 & -0.81\\
+0.99 & 1.01 & 0.57 & 0.99\\
+-1.01 & -0.37 & -0.09 & 0.38\\
+-1.01 & -1.16 & 1.55 & 1.18\\
+0.99 & 1.45 & -0.93 & 1.43\\
+-1.01 & 0.09 & 0.51 & -0.09\\
+0.99 & 1.58 & -0.39 & 1.56\\
+0.99 & 1.43 & 1.91 & 1.42\\
+0.99 & -0.85 & 0.25 & -0.84\\
+0.99 & 1.22 & -2.25 & 1.21\\
+-1.01 & 0.42 & 1.17 & -0.43\\
+-1.01 & -0.35 & -0.59 & 0.35\\
+0.99 & -0.23 & 0.00 & -0.23\\
+0.99 & 0.23 & -0.26 & 0.22\\
+0.99 & 0.41 & -0.99 & 0.41\\
+-1.01 & 1.24 & -0.57 & -1.25\\
+-1.01 & -0.32 & -0.84 & 0.32\\
+0.99 & 0.42 & 0.26 & 0.42\\
+0.99 & -0.61 & 0.89 & -0.60\\
+0.99 & -0.22 & -0.62 & -0.22\\
+0.99 & 1.34 & 0.83 & 1.32\\
+-1.01 & -2.90 & -1.08 & 2.92\\
+0.99 & 1.34 & 1.74 & 1.33\\
+0.99 & 0.94 & 0.76 & 0.93\\
+-1.01 & -0.61 & -0.71 & 0.62\\
+0.99 & 0.98 & 0.80 & 0.97\\
+0.99 & 0.42 & -0.93 & 0.42\\
+-1.01 & -1.49 & -1.17 & 1.50\\
+-1.01 & -1.06 & -0.42 & 1.07\\
+-1.01 & -0.55 & -0.25 & 0.56\\
+-1.01 & -1.15 & -1.03 & 1.16\\
+0.99 & 1.10 & 0.20 & 1.08\\
+0.99 & -0.65 & -0.94 & -0.64\\
+-1.01 & -0.01 & -1.68 & 0.01\\
+-1.01 & 1.69 & 0.28 & -1.71\\
+0.99 & 0.03 & 0.50 & 0.03\\
+-1.01 & -1.07 & -1.73 & 1.09\\
+0.99 & 1.17 & 2.03 & 1.16\\
+0.99 & 1.15 & 0.54 & 1.14\\
+0.99 & -0.22 & -0.92 & -0.22\\
+0.99 & -0.74 & -1.69 & -0.73\\
+0.99 & 0.20 & -0.23 & 0.20\\
+0.99 & -0.13 & 0.56 & -0.13\\
+-1.01 & -0.28 & -0.86 & 0.28\\
+-1.01 & 0.61 & -0.52 & -0.62\\
+0.99 & -0.80 & 0.05 & -0.79\\
+-1.01 & -0.03 & -0.75 & 0.03\\
+-1.01 & -0.47 & 0.86 & 0.48\\
+-1.01 & 0.01 & 1.27 & -0.01\\
+-1.01 & 0.55 & 0.50 & -0.55\\
+0.99 & 0.14 & 0.06 & 0.14\\
+0.99 & 0.25 & -0.77 & 0.25\\
+-1.01 & -0.97 & 1.47 & 0.98\\
+-1.01 & -0.69 & -1.39 & 0.70\\
+0.99 & 0.76 & 1.69 & 0.75\\
+-1.01 & 0.90 & 0.20 & -0.91\\
+0.99 & 1.20 & 0.78 & 1.18\\
+0.99 & 0.65 & 0.70 & 0.64\\
+-1.01 & -0.08 & 0.00 & 0.09\\
+-1.01 & -1.09 & -1.28 & 1.10\\
+0.99 & 0.75 & 0.99 & 0.74\\
+-1.01 & -1.03 & -0.10 & 1.04\\
+-1.01 & -0.49 & 0.06 & 0.49\\
+-1.01 & -0.93 & 0.88 & 0.94\\
+0.99 & 1.65 & -0.21 & 1.63\\
+0.99 & 1.17 & -0.94 & 1.15\\
+0.99 & -1.26 & -0.83 & -1.24\\
+-1.01 & -1.53 & -0.57 & 1.54\\
+-1.01 & -1.47 & -0.38 & 1.48\\
+0.99 & -1.36 & 0.34 & -1.34\\
+-1.01 & -0.22 & 0.46 & 0.22\\
+-1.01 & 0.55 & -0.22 & -0.56\\
+-1.01 & -1.09 & -0.83 & 1.10\\
+0.99 & -0.09 & -1.21 & -0.09\\
+-1.01 & -0.87 & -1.06 & 0.87\\
+0.99 & 1.24 & 0.19 & 1.23\\
+0.99 & 1.93 & -1.03 & 1.90\\
+0.99 & 0.23 & 0.38 & 0.22\\
+-1.01 & 0.16 & -2.07 & -0.16\\
+0.99 & -0.16 & -1.81 & -0.16\\
+-1.01 & -0.38 & 0.13 & 0.38\\
+-1.01 & -1.31 & -0.70 & 1.32\\
+0.99 & 1.22 & 1.65 & 1.21\\
+0.99 & -0.58 & -1.06 & -0.58\\
+0.99 & 0.79 & -0.33 & 0.78\\
+-1.01 & 0.78 & 0.95 & -0.79\\
+-1.01 & 0.53 & 0.77 & -0.54\\
+-1.01 & 0.45 & -1.15 & -0.45\\
+0.99 & -0.79 & -0.14 & -0.78\\
+0.99 & 1.42 & 0.95 & 1.41\\
+-1.01 & 0.87 & -0.19 & -0.88\\
+0.99 & -0.02 & 0.17 & -0.02\\
+-1.01 & -0.06 & -0.84 & 0.06\\
+-1.01 & -1.19 & -0.82 & 1.20\\
+0.99 & -0.29 & 0.46 & -0.29\\
+-1.01 & 0.72 & 0.23 & -0.73\\
+0.99 & 0.68 & -0.36 & 0.67\\
+0.99 & 0.92 & 0.39 & 0.91\\
+0.99 & -1.01 & 0.75 & -0.99\\
+-1.01 & -1.28 & -0.61 & 1.30\\
+-1.01 & -0.53 & 0.65 & 0.54\\
+-1.01 & 0.20 & 0.53 & -0.20\\
+0.99 & -1.09 & -0.50 & -1.08\\
+\bottomrule
+\end{tabular}
+
+\end{threeparttable}
+\end{center}
+
+\end{table}
+
+X1 represents entitativity condition, where group 1 is the condition in which U.S. Jews are not depicted as entitative and group 2 is the condition in which U.S. Jews is depicted as entitative. X2 represents stereotype endorsement, while Y represents economic game behavior.
+
+\section{Methods}\label{methods}
+
+\subsection{Transparency and Openness}\label{transparency-and-openness}
+
+We report how we determined our sample size, all data exclusions, all manipulations, and all measures in the study, which follows JARS (Kazak, 2018). Of note, we treat the scale measurements used in this study as continuous variables, following literature convention and reviewer feedback.
+
+\subsection{Participants}\label{participants}
+
+Participants were Prolific users with a 95\% or higher task acceptance rate who reported currently attending a university in the U.S. Inclusion criteria also included English language fluency. University students were chosen because the cover story for the experiment was a competition between teams of university students, where the teams vary in their homogeneity. Furthermore, university students' attitudes towards Jews became a national focus in 2023, so their level of antisemitic stereotype endorsement is worth assessing. We had sufficient funding for a sample size of N = 400.
+Exclusion criteria, all of which were pre-registered, included incomplete survey responses, failing attention checks 2 or more times, failing comprehension checks on the economic games 2 or more times, after repeated recaps and instructional clarifications, failing bot-catching reCAPTCHA validation checks, opting out of being included in the analysis (i.e., by responding ``don't include my data for analyses'' to an effort check question. Participants who self-identified as Jewish, of whom there were two, were also excluded from analyses.
+We conducted a simulation-based power analysis using the InteractionPoweR package (Baranger et al., 2023). Correlations (Pearson's R) between stereotype endorsement and economic game behavior (let this be r.x2.y), between entitativity condition and stereotype endorsement (r.x1.x2) were conservatively estimated based on Walsh et al.~(under review) and Dang et al.~(2018), respectively. We calculated statistical power for a range of values {[}0.1, 0.5{]} of the correlation between entitativity condition and economic game behavior (r.x1.y) and the interaction term (r.x1.x2.y). This range was based on estimated derived from pilot data.
+
+\begin{verbatim}
+## Warning: executing %dopar% sequentially: no parallel backend registered
+\end{verbatim}
+
+\includegraphics{Packman_Final_Project_files/figure-latex/unnamed-chunk-2-1.pdf}
+Based on this power analysis, with an N of 400, we have at least 85\% power to detect interaction effects of 0.15 or higher for r.x1.y (correlation between entitativity condition and trust game behavior) values ranging from 0.1 to 0.5.
+
+\subsection{Materials}\label{materials}
+
+Materials include the 9-item SASS scale, divided into warmth and competence subscales (see Appendix D and summary table below), the antizionist antisemitism scale (AZAs; Allington \& Hirsh, 2019), and the RWA and SDO measures used previously. Additionally, one question, ``When we think about the world, it comes down to the oppressor vs the oppressed,'' assessed participants' ``oppression mindset,'' a facet of simplistic attributions about social power (Pomerantz, under review).A four-question entitativity scale (Callahan \& Ledgerwood, 2016) served as an entitativity manipulation check.
+
+\subsection{Procedure}\label{procedure}
+
+Participants were told that our lab is studying how well different kinds of teams of university students perform in economic games. They were assigned to a team of 3 students, which was matched against another team of 3. Participants are told that they will be playing against one student from another team in two economic games (trust game and puzzle game).
+Participants' teammates were recruited prior to the study and are the same for every participant. Participants saw one fact about the identities of their teammates (e.g., ``I'm a woman in STEM.'') in addition to their university, and then were asked to share one aspect of their own identity and where they attend university.
+Participants were then be shown the opposing team, which varies by experimental conditions. In the low entitativity condition, the opposing team contained three players, one of whom was a Jewish student at Yeshiva University. In the high entitativity condition. the opposing team contained three Jewish players, all from Yeshiva. In both conditions, participants were matched with the Jewish player (who was previously recruited) to play the two economic games. The experimental manipulation is whether that Jewish person was part of a group of Jews, or was a singular Jewish person.
+Participants played a round of the incentivized trust game as well as a round of the incentivized competence puzzle game, with their matched Jewish player. The order in which participants played the gameswas randomized. Participants did not receive feedback between games, or between rounds of a game, on the performance of their co-player so as not to influence subsequent trials. In the trust game, the dependent variable is how much money (out of \$1) participants share with their Jewish co-player. In the puzzle game, the dependent variable is how many puzzles (between zero and five) pariticipants guess their Jewish co-player will solve. Three participants failed two comprehension checks, and were excluded from the analysis.
+Participants then completed the 9-item scale of antisemitic stereotypes an entitativity manipulation check, RWA and SDO measures, and the AzA scale (antizionist antisemitism).
+
+\subsection{Data analysis}\label{data-analysis}
+
+Data were analyzed using R. This study's design and its analyses were preregistered. All data, analysis code, preregistration information, and research materials are available at \url{https://osf.io/kf8r7/?view_only=432db566188642258b1c3bf51a71aa55}.
+
+\section{Results}\label{results}
+
+\subsection{Antisemitism Scale Summary Statistics}\label{antisemitism-scale-summary-statistics}
+
+\begin{verbatim}
+##  Jewish.people.tend.to.complain.a.lot. Jewish.people.are.often.very.rude.
+##  Min.   :0.000                         Min.   :0.000                     
+##  1st Qu.:1.000                         1st Qu.:0.000                     
+##  Median :1.000                         Median :1.000                     
+##  Mean   :1.464                         Mean   :1.198                     
+##  3rd Qu.:2.000                         3rd Qu.:2.000                     
+##  Max.   :5.000                         Max.   :5.000                     
+##  All.things.considered..Jewish.people.are.untrustworthy.
+##  Min.   :0.0000                                         
+##  1st Qu.:0.0000                                         
+##  Median :1.0000                                         
+##  Mean   :0.9365                                         
+##  3rd Qu.:1.0000                                         
+##  Max.   :5.0000                                         
+##  Jewish.people.can.be.sneaky.
+##  Min.   :0.000               
+##  1st Qu.:1.000               
+##  Median :1.000               
+##  Mean   :1.596               
+##  3rd Qu.:3.000               
+##  Max.   :5.000               
+##  When.they.feel.slighted..Jewish.people.will.be.vengeful.
+##  Min.   :0.000                                           
+##  1st Qu.:1.000                                           
+##  Median :1.000                                           
+##  Mean   :1.596                                           
+##  3rd Qu.:2.000                                           
+##  Max.   :5.000                                           
+##  Jewish.people.tend.to.influence.the.media.
+##  Min.   :0.00                              
+##  1st Qu.:1.00                              
+##  Median :2.00                              
+##  Mean   :2.19                              
+##  3rd Qu.:3.00                              
+##  Max.   :5.00                              
+##  Jewish.people.tend.to.be.good.with.money.
+##  Min.   :0.000                            
+##  1st Qu.:3.000                            
+##  Median :3.000                            
+##  Mean   :3.386                            
+##  3rd Qu.:4.000                            
+##  Max.   :5.000                            
+##  When.it.comes.to.education..Jewish.people.tend.to.be.overachievers.
+##  Min.   :0.000                                                      
+##  1st Qu.:2.000                                                      
+##  Median :3.000                                                      
+##  Mean   :2.871                                                      
+##  3rd Qu.:4.000                                                      
+##  Max.   :5.000                                                      
+##  On.the.whole..Jewish.people.are.loyal.to.Israel.
+##  Min.   :0.000                                   
+##  1st Qu.:2.000                                   
+##  Median :3.000                                   
+##  Mean   :3.043                                   
+##  3rd Qu.:4.000                                   
+##  Max.   :5.000
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Standardized Cronbach's alpha for the 'Warmth' data-set
+## 
+## Items: 6
+## Sample units: 394
+## alpha: 0.897
+## 
+## Bootstrap 95% CI based on 1000 samples
+##  2.5% 97.5% 
+## 0.876 0.914
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Standardized Cronbach's alpha for the 'Competence' data-set
+## 
+## Items: 3
+## Sample units: 394
+## alpha: 0.649
+## 
+## Bootstrap 95% CI based on 1000 samples
+##  2.5% 97.5% 
+## 0.564 0.714
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "0.897304153641228"                                         
+## [2] "394"                                                       
+## [3] "6"                                                         
+## [4] "TRUE"                                                      
+## [5] "Warmth"                                                    
+## [6] "c(`2.5%` = 0.876471575791418, `97.5%` = 0.913741245066768)"
+## [7] "c(0.025, 0.975)"                                           
+## [8] "1000"
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "0.648767216652386"                                         
+## [2] "394"                                                       
+## [3] "3"                                                         
+## [4] "TRUE"                                                      
+## [5] "Competence"                                                
+## [6] "c(`2.5%` = 0.563641749811883, `97.5%` = 0.714397828376385)"
+## [7] "c(0.025, 0.975)"                                           
+## [8] "1000"
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "0.853539094576886"                                         
+## [2] "394"                                                       
+## [3] "9"                                                         
+## [4] "FALSE"                                                     
+## [5] "SASS"                                                      
+## [6] "c(`2.5%` = 0.824990891563454, `97.5%` = 0.876647112527845)"
+## [7] "c(0.025, 0.975)"                                           
+## [8] "1000"
+\end{verbatim}
+
+The full SASS scale had a Cronbach's alpha of 0.8535390945768863949FALSESASSc(\texttt{2.5\%} = 0.824990891563454, \texttt{97.5\%} = 0.876647112527845)c(0.025, 0.975)1000.
+The warmth subscale had a Cronbach's alpha of 0.8973041536412283946TRUEWarmthc(\texttt{2.5\%} = 0.876471575791418, \texttt{97.5\%} = 0.913741245066768)c(0.025, 0.975)1000.
+The competence subscale had a Cronbach's alpha of 0.6487672166523863943TRUECompetencec(\texttt{2.5\%} = 0.563641749811883, \texttt{97.5\%} = 0.714397828376385)c(0.025, 0.975)1000.
+
+Means and standard deviations for the 9-item SASS (scale of antisemitic stereotypes) appear in the following table.
+
+\begin{table}[tbp]
+
+\begin{center}
+\begin{threeparttable}
+
+\caption{\label{tab:unnamed-chunk-4}Scale of Antisemitic Stereotypes Descriptive Statistics - Study 6}
+
+\begin{tabular}{llll}
+\toprule
+ \multicolumn{4}{c}{Score} \\
+\cmidrule(r){1-4}
+Questions & \multicolumn{1}{c}{Mean} & \multicolumn{1}{c}{Median} & \multicolumn{1}{c}{SD}\\
+\midrule
+Jewish people are often very rude & 1.20 & 1.00 & 1.10\\
+Jewish people tend to complain a lot & 1.46 & 1.00 & 1.14\\
+All things considered, Jewish people are untrustworthy & 0.94 & 1.00 & 1.03\\
+Jewish people can be sneaky & 1.60 & 1.00 & 1.31\\
+When they feel slighted, Jewish people will be vengeful & 1.60 & 1.00 & 1.22\\
+Jewish people tend to influence the media & 2.19 & 2.00 & 1.38\\
+Jewish people tend to be good with money & 3.39 & 3.00 & 0.97\\
+When it comes to education, Jewish people tend to be overachievers & 2.87 & 3.00 & 1.10\\
+On the whole, Jewish people are loyal to Israel & 3.04 & 3.00 & 1.19\\
+\bottomrule
+\addlinespace
+\end{tabular}
+
+\begin{tablenotes}[para]
+\normalsize{\textit{Note.} Item scores are scored 0-5 ('strongly disagree' - strongly agree')}
+\end{tablenotes}
+
+\end{threeparttable}
+\end{center}
+
+\end{table}
+
+\subsection{Study 6 Confirmatory Factor Analysis}\label{study-6-confirmatory-factor-analysis}
+
+We next perform Confirmatory Factor Analysis (CFA).
+
+\begin{verbatim}
+##          Beta-hat    kappa p-val
+## Skewness  10.9399 718.3868     0
+## Kurtosis 120.9176  15.4589     0
+\end{verbatim}
+
+\begin{verbatim}
+## lavaan 0.6-19 ended normally after 31 iterations
+## 
+##   Estimator                                         ML
+##   Optimization method                           NLMINB
+##   Number of model parameters                        19
+## 
+##   Number of observations                           394
+## 
+## Model Test User Model:
+##                                               Standard      Scaled
+##   Test Statistic                                89.075      76.569
+##   Degrees of freedom                                26          26
+##   P-value (Chi-square)                           0.000       0.000
+##   Scaling correction factor                                  1.163
+##     Yuan-Bentler correction (Mplus variant)                       
+## 
+## Model Test Baseline Model:
+## 
+##   Test statistic                              1598.143    1240.402
+##   Degrees of freedom                                36          36
+##   P-value                                        0.000       0.000
+##   Scaling correction factor                                  1.288
+## 
+## User Model versus Baseline Model:
+## 
+##   Comparative Fit Index (CFI)                    0.960       0.958
+##   Tucker-Lewis Index (TLI)                       0.944       0.942
+##                                                                   
+##   Robust Comparative Fit Index (CFI)                         0.962
+##   Robust Tucker-Lewis Index (TLI)                            0.948
+## 
+## Loglikelihood and Information Criteria:
+## 
+##   Loglikelihood user model (H0)              -4779.357   -4779.357
+##   Scaling correction factor                                  1.369
+##       for the MLR correction                                      
+##   Loglikelihood unrestricted model (H1)      -4734.819   -4734.819
+##   Scaling correction factor                                  1.250
+##       for the MLR correction                                      
+##                                                                   
+##   Akaike (AIC)                                9596.714    9596.714
+##   Bayesian (BIC)                              9672.265    9672.265
+##   Sample-size adjusted Bayesian (SABIC)       9611.978    9611.978
+## 
+## Root Mean Square Error of Approximation:
+## 
+##   RMSEA                                          0.078       0.070
+##   90 Percent confidence interval - lower         0.061       0.054
+##   90 Percent confidence interval - upper         0.097       0.087
+##   P-value H_0: RMSEA <= 0.050                    0.005       0.024
+##   P-value H_0: RMSEA >= 0.080                    0.465       0.183
+##                                                                   
+##   Robust RMSEA                                               0.076
+##   90 Percent confidence interval - lower                     0.056
+##   90 Percent confidence interval - upper                     0.096
+##   P-value H_0: Robust RMSEA <= 0.050                         0.016
+##   P-value H_0: Robust RMSEA >= 0.080                         0.383
+## 
+## Standardized Root Mean Square Residual:
+## 
+##   SRMR                                           0.056       0.056
+## 
+## Parameter Estimates:
+## 
+##   Standard errors                             Sandwich
+##   Information bread                           Observed
+##   Observed information based on                Hessian
+## 
+## Latent Variables:
+##                    Estimate  Std.Err  z-value  P(>|z|)
+##   warmth =~                                           
+##     Jwsh.ppl.r....    1.000                           
+##     Jwsh.ppl......    1.002    0.065   15.422    0.000
+##     All.th...J....    0.955    0.063   15.243    0.000
+##     Jwsh.ppl.cn...    1.176    0.081   14.569    0.000
+##     Whn.....J.....    1.137    0.080   14.202    0.000
+##     Jwsh.ppl......    0.947    0.085   11.109    0.000
+##   competence =~                                       
+##     Jwsh.pp.......    1.000                           
+##     W......J......    0.919    0.131    7.012    0.000
+##     On....J.....I.    0.966    0.123    7.855    0.000
+## 
+## Covariances:
+##                    Estimate  Std.Err  z-value  P(>|z|)
+##   warmth ~~                                           
+##     competence        0.260    0.048    5.391    0.000
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(>|z|)
+##    .Jwsh.ppl.r....    0.423    0.051    8.303    0.000
+##    .Jwsh.ppl......    0.510    0.060    8.484    0.000
+##    .All.th...J....    0.347    0.038    9.035    0.000
+##    .Jwsh.ppl.cn...    0.632    0.092    6.906    0.000
+##    .Whn.....J.....    0.479    0.056    8.607    0.000
+##    .Jwsh.ppl......    1.199    0.095   12.630    0.000
+##    .Jwsh.pp.......    0.461    0.081    5.718    0.000
+##    .W......J......    0.794    0.090    8.857    0.000
+##    .On....J.....I.    0.948    0.092   10.316    0.000
+##     warmth            0.781    0.100    7.837    0.000
+##     competence        0.486    0.101    4.814    0.000
+\end{verbatim}
+
+\begin{verbatim}
+## chisq.scaled   cfi.scaled   tli.scaled rmsea.scaled          aic          bic 
+##       76.569        0.958        0.942        0.070     9596.714     9672.265
+\end{verbatim}
+
+\begin{verbatim}
+## lavaan 0.6-19 ended normally after 23 iterations
+## 
+##   Estimator                                         ML
+##   Optimization method                           NLMINB
+##   Number of model parameters                        18
+## 
+##   Number of observations                           394
+## 
+## Model Test User Model:
+##                                               Standard      Scaled
+##   Test Statistic                               207.086     175.462
+##   Degrees of freedom                                27          27
+##   P-value (Chi-square)                           0.000       0.000
+##   Scaling correction factor                                  1.180
+##     Yuan-Bentler correction (Mplus variant)                       
+## 
+## Model Test Baseline Model:
+## 
+##   Test statistic                              1598.143    1240.402
+##   Degrees of freedom                                36          36
+##   P-value                                        0.000       0.000
+##   Scaling correction factor                                  1.288
+## 
+## User Model versus Baseline Model:
+## 
+##   Comparative Fit Index (CFI)                    0.885       0.877
+##   Tucker-Lewis Index (TLI)                       0.846       0.836
+##                                                                   
+##   Robust Comparative Fit Index (CFI)                         0.887
+##   Robust Tucker-Lewis Index (TLI)                            0.849
+## 
+## Loglikelihood and Information Criteria:
+## 
+##   Loglikelihood user model (H0)              -4838.362   -4838.362
+##   Scaling correction factor                                  1.356
+##       for the MLR correction                                      
+##   Loglikelihood unrestricted model (H1)      -4734.819   -4734.819
+##   Scaling correction factor                                  1.250
+##       for the MLR correction                                      
+##                                                                   
+##   Akaike (AIC)                                9712.724    9712.724
+##   Bayesian (BIC)                              9784.299    9784.299
+##   Sample-size adjusted Bayesian (SABIC)       9727.185    9727.185
+## 
+## Root Mean Square Error of Approximation:
+## 
+##   RMSEA                                          0.130       0.118
+##   90 Percent confidence interval - lower         0.114       0.103
+##   90 Percent confidence interval - upper         0.147       0.134
+##   P-value H_0: RMSEA <= 0.050                    0.000       0.000
+##   P-value H_0: RMSEA >= 0.080                    1.000       1.000
+##                                                                   
+##   Robust RMSEA                                               0.128
+##   90 Percent confidence interval - lower                     0.111
+##   90 Percent confidence interval - upper                     0.147
+##   P-value H_0: Robust RMSEA <= 0.050                         0.000
+##   P-value H_0: Robust RMSEA >= 0.080                         1.000
+## 
+## Standardized Root Mean Square Residual:
+## 
+##   SRMR                                           0.092       0.092
+## 
+## Parameter Estimates:
+## 
+##   Standard errors                             Sandwich
+##   Information bread                           Observed
+##   Observed information based on                Hessian
+## 
+## Latent Variables:
+##                    Estimate  Std.Err  z-value  P(>|z|)
+##   all =~                                              
+##     Jwsh.ppl.r....    1.000                           
+##     Jwsh.ppl......    1.010    0.066   15.363    0.000
+##     All.th...J....    0.955    0.063   15.224    0.000
+##     Jwsh.ppl.cn...    1.186    0.081   14.635    0.000
+##     Whn.....J.....    1.149    0.081   14.122    0.000
+##     Jwsh.ppl......    0.968    0.088   11.054    0.000
+##     Jwsh.pp.......    0.317    0.073    4.370    0.000
+##     W......J......    0.419    0.083    5.072    0.000
+##     On....J.....I.    0.349    0.088    3.957    0.000
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(>|z|)
+##    .Jwsh.ppl.r....    0.435    0.051    8.453    0.000
+##    .Jwsh.ppl......    0.510    0.060    8.529    0.000
+##    .All.th...J....    0.357    0.039    9.110    0.000
+##    .Jwsh.ppl.cn...    0.631    0.091    6.973    0.000
+##    .Whn.....J.....    0.473    0.055    8.605    0.000
+##    .Jwsh.ppl......    1.180    0.094   12.549    0.000
+##    .Jwsh.pp.......    0.870    0.079   10.954    0.000
+##    .W......J......    1.069    0.076   13.992    0.000
+##    .On....J.....I.    1.308    0.093   14.053    0.000
+##     all               0.769    0.100    7.723    0.000
+\end{verbatim}
+
+\begin{verbatim}
+## chisq.scaled   cfi.scaled   tli.scaled rmsea.scaled          aic          bic 
+##      175.462        0.877        0.836        0.118     9712.724     9784.299
+\end{verbatim}
+
+\begin{verbatim}
+## # Rotated loadings from Factor Analysis (oblimin-rotation)
+## 
+## Variable                                                            |  PA1 |  PA2 | Complexity | Uniqueness
+## -----------------------------------------------------------------------------------------------------------
+## All.things.considered..Jewish.people.are.untrustworthy.             | 0.86 |      |       1.02 |       0.30
+## Jewish.people.are.often.very.rude.                                  | 0.84 |      |       1.02 |       0.33
+## When.they.feel.slighted..Jewish.people.will.be.vengeful.            | 0.79 |      |       1.03 |       0.32
+## Jewish.people.can.be.sneaky.                                        | 0.77 |      |       1.01 |       0.38
+## Jewish.people.tend.to.complain.a.lot.                               | 0.76 |      |       1.01 |       0.39
+## Jewish.people.tend.to.influence.the.media.                          | 0.48 |      |       1.72 |       0.56
+## Jewish.people.tend.to.be.good.with.money.                           |      | 0.76 |       1.01 |       0.44
+## When.it.comes.to.education..Jewish.people.tend.to.be.overachievers. |      | 0.54 |       1.07 |       0.66
+## On.the.whole..Jewish.people.are.loyal.to.Israel.                    |      | 0.53 |       1.00 |       0.71
+## 
+## The 2 latent factors (oblimin rotation) accounted for 54.57% of the total variance of the original data (PA1 = 39.56%, PA2 = 15.01%).
+\end{verbatim}
+
+The two-factor model outperformed the one-factor model in terms of goodness of fit.
+
+\subsection{Demography of SASS Scores}\label{demography-of-sass-scores}
+
+We next compare SASS scores by racial/ethnic groups.
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = EntGamesRace$SASS.Score ~ EntGamesRace$Race_1)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -18.8511  -4.8511  -0.4943   4.1481  26.1481 
+## 
+## Coefficients:
+##                                       Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)                            19.8511     1.0164  19.531  < 2e-16 ***
+## EntGamesRace$Race_1Black/African        0.6432     1.2614   0.510  0.61043    
+## EntGamesRace$Race_1Hispanic Non-White  -2.1368     2.8229  -0.757  0.44959    
+## EntGamesRace$Race_1White/European      -2.9992     1.1215  -2.674  0.00784 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 6.968 on 353 degrees of freedom
+## Multiple R-squared:  0.05406,    Adjusted R-squared:  0.04602 
+## F-statistic: 6.725 on 3 and 353 DF,  p-value: 0.000201
+\end{verbatim}
+
+\begin{verbatim}
+## $emmeans
+##  Race_1             emmean    SE  df lower.CL upper.CL
+##  Asian                19.9 1.020 353     17.9     21.8
+##  Black/African        20.5 0.747 353     19.0     22.0
+##  Hispanic Non-White   17.7 2.630 353     12.5     22.9
+##  White/European       16.9 0.474 353     15.9     17.8
+## 
+## Confidence level used: 0.95 
+## 
+## $contrasts
+##  contrast                                estimate    SE  df t.ratio p.value
+##  Asian - (Black/African)                   -0.643 1.260 353  -0.510  0.9567
+##  Asian - (Hispanic Non-White)               2.137 2.820 353   0.757  0.8737
+##  Asian - (White/European)                   2.999 1.120 353   2.674  0.0390
+##  (Black/African) - (Hispanic Non-White)     2.780 2.740 353   1.016  0.7405
+##  (Black/African) - (White/European)         3.642 0.885 353   4.117  0.0003
+##  (Hispanic Non-White) - (White/European)    0.862 2.680 353   0.322  0.9884
+## 
+## P value adjustment: tukey method for comparing a family of 4 estimates
+\end{verbatim}
+
+\begin{verbatim}
+## $estimate
+## $estimate$Intercept
+## [1] "$b = 19.85$, 95\\% CI $[17.85, 21.85]$"
+## 
+## $estimate$EntGamesRace_Race_1Black_African
+## [1] "$b = 0.64$, 95\\% CI $[-1.84, 3.12]$"
+## 
+## $estimate$EntGamesRace_Race_1Hispanic_Non_White
+## [1] "$b = -2.14$, 95\\% CI $[-7.69, 3.42]$"
+## 
+## $estimate$EntGamesRace_Race_1White_European
+## [1] "$b = -3.00$, 95\\% CI $[-5.20, -0.79]$"
+## 
+## $estimate$modelfit
+## $estimate$modelfit$r2
+## [1] "$R^2 = .05$"
+## 
+## $estimate$modelfit$r2_adj
+## [1] "$R^2_{adj} = .05$"
+## 
+## $estimate$modelfit$aic
+## [1] "$\\mathrm{AIC} = 2,405.19$"
+## 
+## $estimate$modelfit$bic
+## [1] "$\\mathrm{BIC} = 2,424.58$"
+## 
+## 
+## 
+## $statistic
+## $statistic$Intercept
+## [1] "$t(353) = 19.53$, $p < .001$"
+## 
+## $statistic$EntGamesRace_Race_1Black_African
+## [1] "$t(353) = 0.51$, $p = .610$"
+## 
+## $statistic$EntGamesRace_Race_1Hispanic_Non_White
+## [1] "$t(353) = -0.76$, $p = .450$"
+## 
+## $statistic$EntGamesRace_Race_1White_European
+## [1] "$t(353) = -2.67$, $p = .008$"
+## 
+## $statistic$modelfit
+## $statistic$modelfit$r2
+## [1] "$F(3, 353) = 6.72$, $p < .001$"
+## 
+## 
+## 
+## $full_result
+## $full_result$Intercept
+## [1] "$b = 19.85$, 95\\% CI $[17.85, 21.85]$, $t(353) = 19.53$, $p < .001$"
+## 
+## $full_result$EntGamesRace_Race_1Black_African
+## [1] "$b = 0.64$, 95\\% CI $[-1.84, 3.12]$, $t(353) = 0.51$, $p = .610$"
+## 
+## $full_result$EntGamesRace_Race_1Hispanic_Non_White
+## [1] "$b = -2.14$, 95\\% CI $[-7.69, 3.42]$, $t(353) = -0.76$, $p = .450$"
+## 
+## $full_result$EntGamesRace_Race_1White_European
+## [1] "$b = -3.00$, 95\\% CI $[-5.20, -0.79]$, $t(353) = -2.67$, $p = .008$"
+## 
+## $full_result$modelfit
+## $full_result$modelfit$r2
+## [1] "$R^2 = .05$, $F(3, 353) = 6.72$, $p < .001$"
+## 
+## 
+## 
+## $table
+## A data.frame with 6 labelled columns:
+## 
+##                       term estimate       conf.int statistic  df p.value
+## 1                Intercept    19.85 [17.85, 21.85]     19.53 353  < .001
+## 2      Race 1Black/African     0.64  [-1.84, 3.12]      0.51 353    .610
+## 3 Race 1Hispanic Non-White    -2.14  [-7.69, 3.42]     -0.76 353    .450
+## 4     Race 1White/European    -3.00 [-5.20, -0.79]     -2.67 353    .008
+## 
+## term     : Predictor 
+## estimate : $b$ 
+## conf.int : 95\\% CI 
+## statistic: $t$ 
+## df       : $\\mathit{df}$ 
+## p.value  : $p$ 
+## attr(,"class")
+## [1] "apa_results" "list"
+\end{verbatim}
+
+Asian participants and Black participants tended to score higher on the antisemitism scale than White participants (list(Intercept = ``\(pes = 19.85\), 95\textbackslash\% CI \([17.85, 21.85]\)'', EntGamesRace\_Race\_1Black\_African = ``\(pes = 0.64\), 95\textbackslash\% CI \([-1.84, 3.12]\)'', EntGamesRace\_Race\_1Hispanic\_Non\_White = ``\(pes = -2.14\), 95\textbackslash\% CI \([-7.69, 3.42]\)'', EntGamesRace\_Race\_1White\_European = ``\(pes = -3.00\), 95\textbackslash\% CI \([-5.20, -0.79]\)'', modelfit = list(r2 = ``\(R^2 = .05\)'', r2\_adj = ``\(R^2_{adj} = .05\)'', aic = ``\(\\mathrm{AIC} = 2,405.19\)'', bic = ``\(\\mathrm{BIC} = 2,424.58\)'')), list(Intercept = ``\(t[353] = 19.53\), \(p < .001\)'', EntGamesRace\_Race\_1Black\_African = ``\(t[353] = 0.51\), \(p = .610\)'', EntGamesRace\_Race\_1Hispanic\_Non\_White = ``\(t[353] = -0.76\), \(p = .450\)'', EntGamesRace\_Race\_1White\_European = ``\(t[353] = -2.67\), \(p = .008\)'', modelfit = list(r2 = ``\(F[3, 353] = 6.72\), \(p < .001\)'')), list(Intercept = ``\(pes = 19.85\), 95\textbackslash\% CI \([17.85, 21.85]\), \(t[353] = 19.53\), \(p < .001\)'', EntGamesRace\_Race\_1Black\_African = ``\(pes = 0.64\), 95\textbackslash\% CI \([-1.84, 3.12]\), \(t[353] = 0.51\), \(p = .610\)'', EntGamesRace\_Race\_1Hispanic\_Non\_White = ``\(pes = -2.14\), 95\textbackslash\% CI \([-7.69, 3.42]\), \(t[353] = -0.76\), \(p = .450\)'', EntGamesRace\_Race\_1White\_European = ``\(pes = -3.00\), 95\textbackslash\% CI \([-5.20, -0.79]\), \(t[353] = -2.67\), \(p = .008\)'', modelfit = list(r2 = ``\(R^2 = .05\), \(F[3, 353] = 6.72\), \(p < .001\)'')), list(term = c(``Intercept'', ``Race 1Black/African'', ``Race 1Hispanic Non-White'', ``Race 1White/European''), estimate = c(``19.85'', ``0.64'', ``-2.14'', ``-3.00''), conf.int = c(``{[}17.85, 21.85{]}'', ``{[}-1.84, 3.12{]}'', ``{[}-7.69, 3.42{]}'', ``{[}-5.20, -0.79{]}''), statistic = c(``19.53'', ``0.51'', ``-0.76'', ``-2.67''), df = c(``353'', ``353'', ``353'', ``353''), p.value = c(``\textless{} .001'', ``.610'', ``.450'', ``.008'')))
+
+\subsection{SASS Scores Linear Models}\label{sass-scores-linear-models}
+
+We then construct linear models to assess the variation in SASS scores.
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = SASS.Score ~ Gender, data = EntGames)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -18.4725  -4.9515  -0.3103   3.6897  23.5275 
+## 
+## Coefficients:
+##                 Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)      19.4725     0.5228  37.245  < 2e-16 ***
+## GenderNonbinary  -3.3614     2.4085  -1.396  0.16362    
+## GenderWoman      -2.1622     0.7200  -3.003  0.00285 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 7.053 on 391 degrees of freedom
+## Multiple R-squared:  0.02467,    Adjusted R-squared:  0.01968 
+## F-statistic: 4.945 on 2 and 391 DF,  p-value: 0.007569
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 2678.368
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = SASS.Score ~ Gender + Condition, data = EntGames)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -18.2327  -4.8915  -0.5427   3.8981  23.7673 
+## 
+## Coefficients:
+##                         Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)              19.2327     0.6516  29.515  < 2e-16 ***
+## GenderNonbinary          -3.2686     2.4151  -1.353  0.17672    
+## GenderWoman              -2.1309     0.7224  -2.950  0.00337 ** 
+## ConditionNon-Entitative   0.4409     0.7140   0.617  0.53728    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 7.059 on 390 degrees of freedom
+## Multiple R-squared:  0.02562,    Adjusted R-squared:  0.01813 
+## F-statistic: 3.419 on 3 and 390 DF,  p-value: 0.01744
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 2683.96
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Model 1: SASS.Score ~ Gender
+## Model 2: SASS.Score ~ Gender + Condition
+##   Res.Df   RSS Df Sum of Sq      F Pr(>F)
+## 1    391 19452                           
+## 2    390 19433  1    18.998 0.3813 0.5373
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = SASS.Score ~ Gender + Entitativity, data = EntGames)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -18.1095  -4.0006  -0.4489   3.5499  23.0974 
+## 
+## Coefficients:
+##                 Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)      6.68943    1.39658   4.790 2.37e-06 ***
+## GenderNonbinary -1.12064    2.17600  -0.515  0.60684    
+## GenderWoman     -1.78825    0.64798  -2.760  0.00606 ** 
+## Entitativity     0.55486    0.05709   9.719  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 6.336 on 390 degrees of freedom
+## Multiple R-squared:  0.2148, Adjusted R-squared:  0.2088 
+## F-statistic: 35.57 on 3 and 390 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 2598.887
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Model 1: SASS.Score ~ Gender
+## Model 2: SASS.Score ~ Gender + Entitativity
+##   Res.Df   RSS Df Sum of Sq      F    Pr(>F)    
+## 1    391 19452                                  
+## 2    390 15659  1    3792.9 94.465 < 2.2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = SASS.Score ~ Gender + Entitativity + Political.Ideology, 
+##     data = EntGames)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -17.8580  -4.1915  -0.7633   3.8038  20.9901 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)         4.98770    1.39026   3.588 0.000376 ***
+## GenderNonbinary     0.79026    2.13745   0.370 0.711794    
+## GenderWoman        -1.36830    0.63225  -2.164 0.031059 *  
+## Entitativity        0.46895    0.05764   8.136 5.57e-15 ***
+## Political.Ideology  0.98516    0.18836   5.230 2.77e-07 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 6.133 on 389 degrees of freedom
+## Multiple R-squared:  0.2664, Adjusted R-squared:  0.2589 
+## F-statistic: 35.32 on 4 and 389 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 2578.086
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Model 1: SASS.Score ~ Gender + Entitativity
+## Model 2: SASS.Score ~ Gender + Entitativity + Political.Ideology
+##   Res.Df   RSS Df Sum of Sq      F   Pr(>F)    
+## 1    390 15659                                 
+## 2    389 14630  1    1028.8 27.357 2.77e-07 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = SASS.Score ~ Gender + Entitativity + Political.Ideology + 
+##     AZAs, data = EntGames)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -18.2340  -4.1037  -0.5033   3.7545  18.3947 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)        -0.53730    1.81680  -0.296   0.7676    
+## GenderNonbinary    -0.78386    2.11311  -0.371   0.7109    
+## GenderWoman        -1.47042    0.61710  -2.383   0.0177 *  
+## Entitativity        0.45653    0.05629   8.110 6.69e-15 ***
+## Political.Ideology  1.29710    0.19599   6.618 1.21e-10 ***
+## AZAs                0.29228    0.06396   4.570 6.58e-06 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 5.982 on 388 degrees of freedom
+## Multiple R-squared:  0.3039, Adjusted R-squared:  0.2949 
+## F-statistic: 33.88 on 5 and 388 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 2563.409
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Model 1: SASS.Score ~ Gender + Entitativity + Political.Ideology
+## Model 2: SASS.Score ~ Gender + Entitativity + Political.Ideology + AZAs
+##   Res.Df   RSS Df Sum of Sq      F    Pr(>F)    
+## 1    389 14630                                  
+## 2    388 13883  1    747.12 20.881 6.579e-06 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = SASS.Score ~ Gender + Entitativity + Political.Ideology + 
+##     AZAs + RWA.Score, data = EntGames)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -18.3780  -3.9269  -0.5285   3.6528  18.2071 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)        -1.33217    1.83604  -0.726   0.4685    
+## GenderNonbinary    -0.60721    2.10162  -0.289   0.7728    
+## GenderWoman        -1.45438    0.61340  -2.371   0.0182 *  
+## Entitativity        0.41909    0.05809   7.215 2.87e-12 ***
+## Political.Ideology  0.99309    0.23250   4.271 2.45e-05 ***
+## AZAs                0.31286    0.06415   4.877 1.58e-06 ***
+## RWA.Score           0.09317    0.03889   2.395   0.0171 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 5.945 on 387 degrees of freedom
+## Multiple R-squared:  0.3141, Adjusted R-squared:  0.3034 
+## F-statistic: 29.53 on 6 and 387 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 2563.587
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Model 1: SASS.Score ~ Gender + Entitativity + Political.Ideology + AZAs
+## Model 2: SASS.Score ~ Gender + Entitativity + Political.Ideology + AZAs + 
+##     RWA.Score
+##   Res.Df   RSS Df Sum of Sq     F  Pr(>F)  
+## 1    388 13883                             
+## 2    387 13680  1    202.83 5.738 0.01708 *
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = SASS.Score ~ Gender + Entitativity + Political.Ideology + 
+##     AZAs + RWA.Score + SDO.Score, data = EntGames)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -17.1314  -3.8049  -0.1159   3.6387  14.9645 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)        -4.19847    1.78517  -2.352  0.01918 *  
+## GenderNonbinary    -0.44805    1.98680  -0.226  0.82170    
+## GenderWoman        -1.06827    0.58257  -1.834  0.06746 .  
+## Entitativity        0.44453    0.05504   8.077 8.57e-15 ***
+## Political.Ideology  0.74272    0.22279   3.334  0.00094 ***
+## AZAs                0.29077    0.06073   4.788 2.40e-06 ***
+## RWA.Score           0.03213    0.03783   0.849  0.39622    
+## SDO.Score           0.75575    0.11014   6.862 2.72e-11 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 5.62 on 386 degrees of freedom
+## Multiple R-squared:  0.3886, Adjusted R-squared:  0.3776 
+## F-statistic: 35.05 on 7 and 386 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 2524.218
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Model 1: SASS.Score ~ Gender + Entitativity + Political.Ideology + AZAs + 
+##     RWA.Score
+## Model 2: SASS.Score ~ Gender + Entitativity + Political.Ideology + AZAs + 
+##     RWA.Score + SDO.Score
+##   Res.Df   RSS Df Sum of Sq      F    Pr(>F)    
+## 1    387 13680                                  
+## 2    386 12193  1    1487.2 47.082 2.722e-11 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = SASS.Score ~ Gender + Entitativity + Political.Ideology + 
+##     AZAs + RWA.Score + SDO.Score + X.When.we.think.about.the.world..it.comes.down.to.the.oppressor.vs.the.oppressed.., 
+##     data = EntGames)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -17.1120  -3.6780  -0.0056   3.7122  14.6678 
+## 
+## Coefficients:
+##                                                                                    Estimate
+## (Intercept)                                                                        -5.19162
+## GenderNonbinary                                                                    -0.56744
+## GenderWoman                                                                        -1.12342
+## Entitativity                                                                        0.42668
+## Political.Ideology                                                                  0.76532
+## AZAs                                                                                0.24853
+## RWA.Score                                                                           0.02134
+## SDO.Score                                                                           0.78593
+## X.When.we.think.about.the.world..it.comes.down.to.the.oppressor.vs.the.oppressed..  0.46058
+##                                                                                    Std. Error
+## (Intercept)                                                                           1.83048
+## GenderNonbinary                                                                       1.97726
+## GenderWoman                                                                           0.58009
+## Entitativity                                                                          0.05533
+## Political.Ideology                                                                    0.22187
+## AZAs                                                                                  0.06329
+## RWA.Score                                                                             0.03794
+## SDO.Score                                                                             0.11040
+## X.When.we.think.about.the.world..it.comes.down.to.the.oppressor.vs.the.oppressed..    0.20564
+##                                                                                    t value
+## (Intercept)                                                                         -2.836
+## GenderNonbinary                                                                     -0.287
+## GenderWoman                                                                         -1.937
+## Entitativity                                                                         7.712
+## Political.Ideology                                                                   3.449
+## AZAs                                                                                 3.927
+## RWA.Score                                                                            0.563
+## SDO.Score                                                                            7.119
+## X.When.we.think.about.the.world..it.comes.down.to.the.oppressor.vs.the.oppressed..   2.240
+##                                                                                    Pr(>|t|)
+## (Intercept)                                                                        0.004806
+## GenderNonbinary                                                                    0.774281
+## GenderWoman                                                                        0.053521
+## Entitativity                                                                       1.07e-13
+## Political.Ideology                                                                 0.000624
+## AZAs                                                                               0.000102
+## RWA.Score                                                                          0.574088
+## SDO.Score                                                                          5.36e-12
+## X.When.we.think.about.the.world..it.comes.down.to.the.oppressor.vs.the.oppressed.. 0.025677
+##                                                                                       
+## (Intercept)                                                                        ** 
+## GenderNonbinary                                                                       
+## GenderWoman                                                                        .  
+## Entitativity                                                                       ***
+## Political.Ideology                                                                 ***
+## AZAs                                                                               ***
+## RWA.Score                                                                             
+## SDO.Score                                                                          ***
+## X.When.we.think.about.the.world..it.comes.down.to.the.oppressor.vs.the.oppressed.. *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 5.591 on 385 degrees of freedom
+## Multiple R-squared:  0.3965, Adjusted R-squared:  0.384 
+## F-statistic: 31.62 on 8 and 385 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 2525.094
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Model 1: SASS.Score ~ Gender + Entitativity + Political.Ideology + AZAs + 
+##     RWA.Score + SDO.Score
+## Model 2: SASS.Score ~ Gender + Entitativity + Political.Ideology + AZAs + 
+##     RWA.Score + SDO.Score + X.When.we.think.about.the.world..it.comes.down.to.the.oppressor.vs.the.oppressed..
+##   Res.Df   RSS Df Sum of Sq      F  Pr(>F)  
+## 1    386 12193                              
+## 2    385 12036  1    156.83 5.0165 0.02568 *
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+The optimal model appears to be fit H (list(Intercept = ``\(pes = -5.19\), 95\textbackslash\% CI \([-8.79, -1.59]\)'', GenderNonbinary = ``\(pes = -0.57\), 95\textbackslash\% CI \([-4.46, 3.32]\)'', GenderWoman = ``\(pes = -1.12\), 95\textbackslash\% CI \([-2.26, 0.02]\)'', Entitativity = ``\(pes = 0.43\), 95\textbackslash\% CI \([0.32, 0.54]\)'', Political\_Ideology = ``\(pes = 0.77\), 95\textbackslash\% CI \([0.33, 1.20]\)'', AZAs = ``\(pes = 0.25\), 95\textbackslash\% CI \([0.12, 0.37]\)'', RWA\_Score = ``\(pes = 0.02\), 95\textbackslash\% CI \([-0.05, 0.10]\)'', SDO\_Score = ``\(pes = 0.79\), 95\textbackslash\% CI \([0.57, 1.00]\)'', X\_When\_we\_think\_about\_the\_world\_it\_comes\_down\_to\_the\_oppressor\_vs\_the\_oppressed\_ = ``\(pes = 0.46\), 95\textbackslash\% CI \([0.06, 0.86]\)'',
+modelfit = list(r2 = ``\(R^2 = .40\)'', r2\_adj = ``\(R^2_{adj} = .38\)'', aic = ``\(\\mathrm{AIC} = 2,485.33\)'', bic = ``\(\\mathrm{BIC} = 2,525.09\)'')), list(Intercept = ``\(t[385] = -2.84\), \(p = .005\)'', GenderNonbinary = ``\(t[385] = -0.29\), \(p = .774\)'', GenderWoman = ``\(t[385] = -1.94\), \(p = .054\)'', Entitativity = ``\(t[385] = 7.71\), \(p < .001\)'', Political\_Ideology = ``\(t[385] = 3.45\), \(p < .001\)'', AZAs = ``\(t[385] = 3.93\), \(p < .001\)'', RWA\_Score = ``\(t[385] = 0.56\), \(p = .574\)'', SDO\_Score = ``\(t[385] = 7.12\), \(p < .001\)'', X\_When\_we\_think\_about\_the\_world\_it\_comes\_down\_to\_the\_oppressor\_vs\_the\_oppressed\_ = ``\(t[385] = 2.24\), \(p = .026\)'', modelfit = list(r2 = ``\(F[8, 385] = 31.62\), \(p < .001\)'')), list(Intercept = ``\(pes = -5.19\), 95\textbackslash\% CI \([-8.79, -1.59]\), \(t[385] = -2.84\), \(p = .005\)'', GenderNonbinary = ``\(pes = -0.57\), 95\textbackslash\% CI \([-4.46, 3.32]\), \(t[385] = -0.29\), \(p = .774\)'', GenderWoman = ``\(pes = -1.12\), 95\textbackslash\% CI \([-2.26, 0.02]\), \(t[385] = -1.94\), \(p = .054\)'', Entitativity = ``\(pes = 0.43\), 95\textbackslash\% CI \([0.32, 0.54]\), \(t[385] = 7.71\), \(p < .001\)'', Political\_Ideology = ``\(pes = 0.77\), 95\textbackslash\% CI \([0.33, 1.20]\), \(t[385] = 3.45\), \(p < .001\)'', AZAs = ``\(pes = 0.25\), 95\textbackslash\% CI \([0.12, 0.37]\), \(t[385] = 3.93\), \(p < .001\)'',
+RWA\_Score = ``\(pes = 0.02\), 95\textbackslash\% CI \([-0.05, 0.10]\), \(t[385] = 0.56\), \(p = .574\)'', SDO\_Score = ``\(pes = 0.79\), 95\textbackslash\% CI \([0.57, 1.00]\), \(t[385] = 7.12\), \(p < .001\)'', X\_When\_we\_think\_about\_the\_world\_it\_comes\_down\_to\_the\_oppressor\_vs\_the\_oppressed\_ = ``\(pes = 0.46\), 95\textbackslash\% CI \([0.06, 0.86]\), \(t[385] = 2.24\), \(p = .026\)'', modelfit = list(r2 = ``\(R^2 = .40\), \(F[8, 385] = 31.62\), \(p < .001\)'')), list(term = c(``Intercept'', ``GenderNonbinary'', ``GenderWoman'', ``Entitativity'', ``Political Ideology'', ``AZAs'', ``RWA Score'', ``SDO Score'', ``X When we think about the world it comes down to the oppressor vs the oppressed''), estimate = c(``-5.19'', ``-0.57'', ``-1.12'', ``0.43'', ``0.77'', ``0.25'', ``0.02'', ``0.79'', ``0.46''), conf.int = c(``{[}-8.79, -1.59{]}'', ``{[}-4.46, 3.32{]}'', ``{[}-2.26, 0.02{]}'', ``{[}0.32, 0.54{]}'', ``{[}0.33, 1.20{]}'', ``{[}0.12, 0.37{]}'', ``{[}-0.05, 0.10{]}'', ``{[}0.57, 1.00{]}'', ``{[}0.06, 0.86{]}''), statistic = c(``-2.84'', ``-0.29'',
+``-1.94'', ``7.71'', ``3.45'', ``3.93'', ``0.56'', ``7.12'', ``2.24''), df = c(``385'', ``385'', ``385'', ``385'', ``385'', ``385'', ``385'', ``385'', ``385''), p.value = c(``.005'', ``.774'', ``.054'', ``\textless{} .001'', ``\textless{} .001'', ``\textless{} .001'', ``.574'', ``\textless{} .001'', ``.026''))).
+
+\subsection{Linearity Assumptions}\label{linearity-assumptions}
+
+We then check linearity assumptions for the SASS model (i.e., fitH).
+\includegraphics{Packman_Final_Project_files/figure-latex/unnamed-chunk-8-1.pdf}
+\#\#\# Linearity
+Plotting residuals against fitted values, there is random scattering around zero. However, there is a slight pattern whereby the residuals increase as the fitted values are less than 10 or above 30. Linearity assumptions are somewhat met.
+
+\#\#\#Normality
+The Q-Q plot, which plots sample quantile deviations vs standard normal distribution quantiles, seems to support the normality assumption: there are no zigzags or heavy tails, and only a slight s-shape.
+
+\#\#\#Homoscedasticity
+In the Homogeneity of variance plot, the variance of the errors increases. The width of the band is also not constant, The homoscedasticity assumption is not met very well.
+
+\subsubsection{Multicolinearity}\label{multicolinearity}
+
+The variance inflation factors for each of the predictors is low (\textless3),meaning Tolerance is high, indicating that the predictors are not too highly correlated.
+
+\subsubsection{Influential Points}\label{influential-points}
+
+Plotting Std. residuals vs leverage, we see clustering around 0 that remains well within the contour lines.
+
+\subsubsection{Posterior Predictive Check}\label{posterior-predictive-check}
+
+The observed data in the density plot resembles the distribution of model-predicted data fairly well.
+
+\subsection{Economic Games Linear Models}\label{economic-games-linear-models}
+
+We then construct linear models for the economic games. Unfortunately, the entitativity manipulation demonstrated no effect on participants' perceptions of Jews' entitativity. Since the manipulation was unsuccessful, we use participants' ratings of Jews' entitativity as a predictor for economic game behavior.
+
+\begin{verbatim}
+## 
+##  Welch Two Sample t-test
+## 
+## data:  EntGames$NonEnt_TG and EntGames$Ent_TG
+## t = 0.30658, df = 391.9, p-value = 0.7593
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.05562277  0.07617523
+## sample estimates:
+## mean of x mean of y 
+## 0.6929293 0.6826531
+\end{verbatim}
+
+\begin{verbatim}
+## 
+##  Welch Two Sample t-test
+## 
+## data:  EntGames$Puzzle_NonEnt and EntGames$Puzzle_Ent
+## t = 0.14437, df = 391.72, p-value = 0.8853
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.1710232  0.1981310
+## sample estimates:
+## mean of x mean of y 
+##  3.171717  3.158163
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Entitativity ~ Condition, data = EntGames)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -17.0253  -3.1684  -0.0253   3.8316  12.8316 
+## 
+## Coefficients:
+##                         Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)              22.1684     0.4019  55.159   <2e-16 ***
+## ConditionNon-Entitative   0.8569     0.5669   1.511    0.131    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 5.627 on 392 degrees of freedom
+## Multiple R-squared:  0.005794,   Adjusted R-squared:  0.003258 
+## F-statistic: 2.284 on 1 and 392 DF,  p-value: 0.1315
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = TG_All ~ SASS.Warmth.Score, data = EntGames)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.80488 -0.26152  0.07332  0.27332  0.54700 
+## 
+## Coefficients:
+##                   Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)        0.80488    0.03006  26.775  < 2e-16 ***
+## SASS.Warmth.Score -0.01303    0.00281  -4.637 4.82e-06 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.324 on 392 degrees of freedom
+## Multiple R-squared:  0.052,  Adjusted R-squared:  0.04958 
+## F-statistic:  21.5 on 1 and 392 DF,  p-value: 4.819e-06
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 245.904
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = TG_All ~ SASS.Warmth.Score + SASS.Competence.Score, 
+##     data = EntGames)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.82992 -0.24725  0.07151  0.27522  0.51967 
+## 
+## Coefficients:
+##                        Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)            0.729245   0.063082  11.560  < 2e-16 ***
+## SASS.Warmth.Score     -0.014553   0.003021  -4.818 2.08e-06 ***
+## SASS.Competence.Score  0.009602   0.007043   1.363    0.174    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.3236 on 391 degrees of freedom
+## Multiple R-squared:  0.05649,    Adjusted R-squared:  0.05166 
+## F-statistic:  11.7 on 2 and 391 DF,  p-value: 1.156e-05
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 250.012
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Model 1: TG_All ~ SASS.Warmth.Score
+## Model 2: TG_All ~ SASS.Warmth.Score + SASS.Competence.Score
+##   Res.Df    RSS Df Sum of Sq      F Pr(>F)
+## 1    392 41.145                           
+## 2    391 40.950  1   0.19465 1.8586 0.1736
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = TG_All ~ SASS.Warmth.Score + Entitativity, data = EntGames)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.80522 -0.26167  0.07324  0.27347  0.54694 
+## 
+## Coefficients:
+##                     Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)        8.056e-01  6.769e-02  11.901  < 2e-16 ***
+## SASS.Warmth.Score -1.302e-02  2.993e-03  -4.351 1.73e-05 ***
+## Entitativity      -3.521e-05  3.088e-03  -0.011    0.991    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.3244 on 391 degrees of freedom
+## Multiple R-squared:  0.052,  Adjusted R-squared:  0.04715 
+## F-statistic: 10.72 on 2 and 391 DF,  p-value: 2.922e-05
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 251.8803
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Model 1: TG_All ~ SASS.Warmth.Score
+## Model 2: TG_All ~ SASS.Warmth.Score + Entitativity
+##   Res.Df    RSS Df  Sum of Sq     F Pr(>F)
+## 1    392 41.145                           
+## 2    391 41.144  1 1.3679e-05 1e-04 0.9909
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = TG_All ~ SASS.Warmth.Score + SASS.Warmth.Score * 
+##     SASS.Competence.Score, data = EntGames)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.82344 -0.23952  0.07025  0.27467  0.49508 
+## 
+## Coefficients:
+##                                           Estimate Std. Error t value Pr(>|t|)
+## (Intercept)                              0.7537459  0.0940382   8.015 1.29e-14
+## SASS.Warmth.Score                       -0.0178330  0.0098045  -1.819   0.0697
+## SASS.Competence.Score                    0.0069623  0.0102994   0.676   0.4995
+## SASS.Warmth.Score:SASS.Competence.Score  0.0003320  0.0009441   0.352   0.7253
+##                                            
+## (Intercept)                             ***
+## SASS.Warmth.Score                       .  
+## SASS.Competence.Score                      
+## SASS.Warmth.Score:SASS.Competence.Score    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.324 on 390 degrees of freedom
+## Multiple R-squared:  0.05679,    Adjusted R-squared:  0.04953 
+## F-statistic: 7.827 on 3 and 390 DF,  p-value: 4.382e-05
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 255.8634
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Model 1: TG_All ~ SASS.Warmth.Score
+## Model 2: TG_All ~ SASS.Warmth.Score + SASS.Warmth.Score * SASS.Competence.Score
+##   Res.Df    RSS Df Sum of Sq     F Pr(>F)
+## 1    392 41.145                          
+## 2    390 40.937  2   0.20763 0.989 0.3729
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = TG_All ~ SASS.Warmth.Score + SASS.Warmth.Score * 
+##     Entitativity + Entitativity, data = EntGames)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.80791 -0.26392  0.07316  0.27356  0.55081 
+## 
+## Coefficients:
+##                                  Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)                     7.902e-01  1.093e-01   7.227 2.61e-12 ***
+## SASS.Warmth.Score              -1.094e-02  1.203e-02  -0.909    0.364    
+## Entitativity                    6.316e-04  4.844e-03   0.130    0.896    
+## SASS.Warmth.Score:Entitativity -8.612e-05  4.815e-04  -0.179    0.858    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.3248 on 390 degrees of freedom
+## Multiple R-squared:  0.05208,    Adjusted R-squared:  0.04479 
+## F-statistic: 7.143 on 3 and 390 DF,  p-value: 0.0001112
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 257.8243
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Model 1: TG_All ~ SASS.Warmth.Score
+## Model 2: TG_All ~ SASS.Warmth.Score + SASS.Warmth.Score * Entitativity + 
+##     Entitativity
+##   Res.Df    RSS Df Sum of Sq      F Pr(>F)
+## 1    392 41.145                           
+## 2    390 41.141  2 0.0033873 0.0161 0.9841
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Puzzle_All ~ SASS.Competence.Score, data = EntGames)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.1612 -0.1987 -0.1612  0.8263  1.9137 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)            3.04883    0.18131  16.815   <2e-16 ***
+## SASS.Competence.Score  0.01249    0.01883   0.663    0.508    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.9312 on 392 degrees of freedom
+## Multiple R-squared:  0.001121,   Adjusted R-squared:  -0.001427 
+## F-statistic: 0.4398 on 1 and 392 DF,  p-value: 0.5076
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 1077.854
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Puzzle_All ~ SASS.Warmth.Score + SASS.Competence.Score, 
+##     data = EntGames)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.9974 -0.3014 -0.1261  0.7845  2.0318 
+## 
+## Coefficients:
+##                        Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)            3.068113   0.180535  16.995   <2e-16 ***
+## SASS.Warmth.Score     -0.019792   0.008646  -2.289   0.0226 *  
+## SASS.Competence.Score  0.029533   0.020157   1.465   0.1437    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.9262 on 391 degrees of freedom
+## Multiple R-squared:  0.01433,    Adjusted R-squared:  0.00929 
+## F-statistic: 2.843 on 2 and 391 DF,  p-value: 0.05948
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 1078.584
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Model 1: Puzzle_All ~ SASS.Competence.Score
+## Model 2: Puzzle_All ~ SASS.Warmth.Score + SASS.Competence.Score
+##   Res.Df   RSS Df Sum of Sq      F Pr(>F)  
+## 1    392 339.9                             
+## 2    391 335.4  1    4.4955 5.2407 0.0226 *
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Puzzle_All ~ SASS.Warmth.Score, data = EntGames)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.0438 -0.2705 -0.1345  0.7900  2.0469 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)        3.300730   0.086062  38.353   <2e-16 ***
+## SASS.Warmth.Score -0.015114   0.008046  -1.878   0.0611 .  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.9275 on 392 degrees of freedom
+## Multiple R-squared:  0.008921,   Adjusted R-squared:  0.006393 
+## F-statistic: 3.528 on 1 and 392 DF,  p-value: 0.06107
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 1074.765
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Model 1: Puzzle_All ~ SASS.Warmth.Score + SASS.Competence.Score
+## Model 2: Puzzle_All ~ SASS.Warmth.Score
+##   Res.Df    RSS Df Sum of Sq      F Pr(>F)
+## 1    391 335.40                           
+## 2    392 337.24 -1   -1.8413 2.1466 0.1437
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Puzzle_All ~ SASS.Warmth.Score + Entitativity, data = EntGames)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.0737 -0.2766 -0.1229  0.7856  1.9986 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)        3.438924   0.193642  17.759   <2e-16 ***
+## SASS.Warmth.Score -0.012792   0.008561  -1.494    0.136    
+## Entitativity      -0.007038   0.008833  -0.797    0.426    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.928 on 391 degrees of freedom
+## Multiple R-squared:  0.01053,    Adjusted R-squared:  0.005466 
+## F-statistic:  2.08 on 2 and 391 DF,  p-value: 0.1263
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 1080.102
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Model 1: Puzzle_All ~ SASS.Warmth.Score
+## Model 2: Puzzle_All ~ SASS.Warmth.Score + Entitativity
+##   Res.Df    RSS Df Sum of Sq      F Pr(>F)
+## 1    392 337.24                           
+## 2    391 336.69  1   0.54665 0.6348 0.4261
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Puzzle_All ~ SASS.Warmth.Score + SASS.Warmth.Score * 
+##     SASS.Competence.Score, data = EntGames)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.9768 -0.2953 -0.1351  0.7830  2.0776 
+## 
+## Coefficients:
+##                                          Estimate Std. Error t value Pr(>|t|)
+## (Intercept)                              3.188099   0.269046  11.850   <2e-16
+## SASS.Warmth.Score                       -0.035852   0.028051  -1.278    0.202
+## SASS.Competence.Score                    0.016605   0.029467   0.564    0.573
+## SASS.Warmth.Score:SASS.Competence.Score  0.001626   0.002701   0.602    0.548
+##                                            
+## (Intercept)                             ***
+## SASS.Warmth.Score                          
+## SASS.Competence.Score                      
+## SASS.Warmth.Score:SASS.Competence.Score    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.9269 on 390 degrees of freedom
+## Multiple R-squared:  0.01525,    Adjusted R-squared:  0.007672 
+## F-statistic: 2.013 on 3 and 390 DF,  p-value: 0.1116
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 1084.195
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Model 1: Puzzle_All ~ SASS.Warmth.Score
+## Model 2: Puzzle_All ~ SASS.Warmth.Score + SASS.Warmth.Score * SASS.Competence.Score
+##   Res.Df    RSS Df Sum of Sq      F Pr(>F)
+## 1    392 337.24                           
+## 2    390 335.09  2    2.1526 1.2527 0.2869
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Puzzle_All ~ SASS.Warmth.Score + SASS.Warmth.Score * 
+##     Entitativity + Entitativity, data = EntGames)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.0506 -0.2874 -0.1142  0.7892  2.0539 
+## 
+## Coefficients:
+##                                  Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)                     3.5450175  0.3127093  11.336   <2e-16 ***
+## SASS.Warmth.Score              -0.0271980  0.0344041  -0.791    0.430    
+## Entitativity                   -0.0116485  0.0138529  -0.841    0.401    
+## SASS.Warmth.Score:Entitativity  0.0005955  0.0013772   0.432    0.666    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.9289 on 390 degrees of freedom
+## Multiple R-squared:  0.011,  Adjusted R-squared:  0.003394 
+## F-statistic: 1.446 on 3 and 390 DF,  p-value: 0.2289
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 1085.89
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Model 1: Puzzle_All ~ SASS.Warmth.Score
+## Model 2: Puzzle_All ~ SASS.Warmth.Score + SASS.Warmth.Score * Entitativity + 
+##     Entitativity
+##   Res.Df    RSS Df Sum of Sq      F Pr(>F)
+## 1    392 337.24                           
+## 2    390 336.53  2   0.70796 0.4102 0.6638
+\end{verbatim}
+
+For the trust game, the optimal model appears to be fit 0 (list(Intercept = ``\(pes = 0.80\), 95\textbackslash\% CI \([0.75, 0.86]\)'', SASS\_Warmth\_Score = ``\(pes = -0.01\), 95\textbackslash\% CI \([-0.02, -0.01]\)'', modelfit = list(r2 = ``\(R^2 = .05\)'', r2\_adj = ``\(R^2_{adj} = .05\)'', aic = ``\(\\mathrm{AIC} = 233.97\)'', bic = ``\(\\mathrm{BIC} = 245.90\)'')), list(Intercept = ``\(t[392] = 26.78\), \(p < .001\)'', SASS\_Warmth\_Score = ``\(t[392] = -4.64\), \(p < .001\)'', modelfit = list(r2 = ``\(F[1, 392] = 21.50\), \(p < .001\)'')), list(Intercept = ``\(pes = 0.80\), 95\textbackslash\% CI \([0.75, 0.86]\), \(t[392] = 26.78\), \(p < .001\)'', SASS\_Warmth\_Score = ``\(pes = -0.01\), 95\textbackslash\% CI \([-0.02, -0.01]\), \(t[392] = -4.64\), \(p < .001\)'', modelfit = list(r2 = ``\(R^2 = .05\), \(F[1, 392] = 21.50\), \(p < .001\)'')), list(term = c(``Intercept'', ``SASS Warmth Score''), estimate = c(``0.80'', ``-0.01''), conf.int = c(``{[}0.75, 0.86{]}'', ``{[}-0.02, -0.01{]}''), statistic = c(``26.78'', ``-4.64''), df = c(``392'', ``392''), p.value = c(``\textless{} .001'', ``\textless{} .001''))). For the puzzle game, the optimal model appears to be fit 7 (list(Intercept = ``\(pes = 3.30\), 95\textbackslash\% CI \([3.13, 3.47]\)'', SASS\_Warmth\_Score = ``\(pes = -0.02\), 95\textbackslash\% CI \([-0.03, 0.00]\)'', modelfit = list(r2 = ``\(R^2 = < .01\)'', r2\_adj = ``\(R^2_{adj} = < .01\)'', aic = ``\(\\mathrm{AIC} = 1,062.84\)'', bic = ``\(\\mathrm{BIC} = 1,074.76\)'')), list(Intercept = ``\(t[392] = 38.35\), \(p < .001\)'', SASS\_Warmth\_Score = ``\(t[392] = -1.88\), \(p = .061\)'', modelfit = list(r2 = ``\(F[1, 392] = 3.53\), \(p = .061\)'')), list(Intercept = ``\(pes = 3.30\), 95\textbackslash\% CI \([3.13, 3.47]\), \(t[392] = 38.35\), \(p < .001\)'', SASS\_Warmth\_Score = ``\(pes = -0.02\), 95\textbackslash\% CI \([-0.03, 0.00]\), \(t[392] = -1.88\), \(p = .061\)'', modelfit = list(r2 = ``\(R^2 = < .01\), \(F[1, 392] = 3.53\), \(p = .061\)'')), list(term = c(``Intercept'', ``SASS Warmth Score''), estimate = c(``3.30'', ``-0.02''), conf.int = c(``{[}3.13, 3.47{]}'', ``{[}-0.03, 0.00{]}''), statistic = c(``38.35'', ``-1.88''), df = c(``392'', ``392''), p.value = c(``\textless{} .001'', ``.061''))). Since fit 7 is not significantly different from the null model, we find no evidence that either warmth or competence stereotypes predict puzzle game behavior.
+
+\subsection{Linearity Assumptions}\label{linearity-assumptions-1}
+
+We then check linearity assumptions for the trust game model (i.e., fit0).
+\includegraphics{Packman_Final_Project_files/figure-latex/unnamed-chunk-10-1.pdf}
+\#\#\# Linearity
+Plotting residuals against fitted values, there is not random scattering around zero. There are clear patterns of bands of decreasing residuals as fitted values increase. Linearity assumptions are not met.
+
+\subsubsection{Normality}\label{normality}
+
+The Q-Q plot, which plots sample quantile deviations vs standard normal distribution quantiles, does not seem to support the normality assumption: there are zigzags and heavy tails.
+
+\subsubsection{Homoscedasticity}\label{homoscedasticity}
+
+In the Homogeneity of variance plot, the variance of the errors is not constant. That is, the error varies considerably as the predictors change. The homoscedasticity assumption is not met.
+
+\subsubsection{Influential Points}\label{influential-points-1}
+
+Plotting Std. residuals vs leverage, we see clustering around 0 that remains well within the contour lines.
+
+\subsubsection{Posterior Predictive Check}\label{posterior-predictive-check-1}
+
+The observed data in the density plot appears bimodal and does not resemble the distribution of model-predicted data fairly well.
+
+\subsection{Correlations}\label{correlations}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  EntGames$SASS.Warmth.Score and EntGames$SASS.Competence.Score
+## t = 7.8688, df = 392, p-value = 3.527e-14
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.2807826 0.4516496
+## sample estimates:
+##       cor 
+## 0.3693335
+\end{verbatim}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  EntGames$SASS.Score and EntGames$RWA.Score
+## t = 7.644, df = 392, p-value = 1.638e-13
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.2710177 0.4431961
+## sample estimates:
+##       cor 
+## 0.3601703
+\end{verbatim}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  EntGames$SASS.Score and EntGames$SDO.Score
+## t = 8.9874, df = 392, p-value < 2.2e-16
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.3279355 0.4920431
+## sample estimates:
+##     cor 
+## 0.41334
+\end{verbatim}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  EntGames$SASS.Score and EntGames$AZAs
+## t = 1.0699, df = 392, p-value = 0.2853
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.04507839  0.15194452
+## sample estimates:
+##        cor 
+## 0.05395822
+\end{verbatim}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  EntGames$SASS.Score and EntGames$Entitativity
+## t = 9.8843, df = 392, p-value < 2.2e-16
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.3639257 0.5224057
+## sample estimates:
+##       cor 
+## 0.4466625
+\end{verbatim}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  EntGames$Puzzle_All and EntGames$Entitativity
+## t = -1.3861, df = 392, p-value = 0.1665
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.16747911  0.02915912
+## sample estimates:
+##         cor 
+## -0.06983838
+\end{verbatim}
+
+\section{Discussion}\label{discussion}
+
+SASS scores varied by racial/ethnic group. Entitativity (treated as a continuous variable), political ideology, antizionist antisemitism, social dominance orientation, and ``oppression mindset'' Perceiving Jews as more entitative predicted greater endorsement of antisemitic stereotypes, as did identifying more strongly as a political conservative. Interestingly, higher agreement with the idea that the world is comprised of oppressed an oppressors predicted higher SASS scores. The experimental entitativity manipulation did not appear to affect participants' appraisal of Jews' entitativity, and had no effect on SASS scores or economic game behavior.
+Only SASS warmth subscale scores predicted trust game behavior. No other measure explained more variance of trust game behavior. No predictors explained variation in puzzle game estimations, meaning no stereotypes predicted puzzle game behavior (i.e., the number of puzzles participants estimated Jewish co-players would solve).
+
+\newpage
+
+\section{References}\label{references}
+
+Allington, Daniel \& Hirsh, David. (2019). The AzAs (Antizionist Antisemitism) Scale: Measuring Antisemitism as Expressed in Relation to Israel and Its Supporters. Journal of Contemporary Antisemitism. 2. 43-51. 10.26613/jca/2.2.32.
+
+Baranger DAA, Finsaas MC, Goldstein BL, Vize CE, Lynam DR, Olino TM. (2023). Tutorial: Power Analyses for Interaction Effects in Cross-Sectional Regressions. Advances in Methods and Practices in Psychological Science, 6(3). \url{doi:10.1177/25152459231187531}
+
+Callahan, S. P., \& Ledgerwood, A. (2016). On the psychological function of flags and logos: Group identity symbols increase perceived entitativity. Journal of Personality and Social Psychology, 110(4), 528--550. \url{https://doi.org/10.1037/pspi0000047}
+
+Dang, J., Liu, L., Ren, D., \& Su, Q. (2018). Polarization and positivity effects: Divergent roles of group entitativity in warmth and competence judgments. Journal of Experimental Social Psychology, 74, 74--84. \url{https://doi.org/10.1016/j.jesp.2017.09.003}
+
+de La Trobe, A. V. T., Brown, G. D. A., \& Walasek, L. (2024). Multiple Reputations: Selective Attention to Competence and Character. Personality and Social Psychology Bulletin, 0(0). \url{https://doi.org/10.1177/01461672241301116}
+
+Dépret, E., \& Fiske, S. T. (1999). Perceiving the powerful: Intriguing individuals versus threatening groups. Journal of Experimental Social Psychology, 35(5), 461--480. \url{https://doi.org/10.1006/jesp.1999.1380}
+
+Pomerantz, A. (under review). Simplistic attributions of social power.
+
+Yzerbyt, V., Judd, C. M., \& Corneille, O. (2004). Perceived variability, entitativity, and essentialism: Introduction and overview.
+
+\#::: \{\#refs custom-style=``Bibliography''\}
+\#:::
+
+
+\end{document}

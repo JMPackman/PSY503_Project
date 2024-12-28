@@ -1,0 +1,577 @@
+---
+title             : "Antisemitic Stereotypes: Theory, Measurement, and Behavior"
+shorttitle        : "Scale of Antisemitic Stereotypes"
+
+author: 
+  - name          : "James Packman"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "40 Woodlands Way, Princeton, NJ 08540"
+    email         : "packman@princeton.edu"
+    role: # Contributorship roles (e.g., CRediT, https://credit.niso.org/)
+      - "Conceptualization"
+      - "Writing - Original Draft Preparation"
+      - "Investigation"
+      - "Data Curation"
+      - "Validation"
+      - "Visualization"
+      - "Software"
+  - name          : "Susan Fiske"
+    affiliation   : "1"
+    role:
+      - "Writing - Review & Editing"
+      - "Supervision"
+      - "Project Administration"
+      - "Methodology"
+      
+  - name          : "Joel Cooper"
+    affiliation   : "1"
+    role:
+      - "Writing - Review & Editing"
+      - "Supervision"
+      - "Methodology"
+      
+affiliation:
+  - id            : "1"
+    institution   : "Princeton University"
+
+
+authornote: |
+  Princeton University, Department of Psychology. 
+  IRB 13242; 13450; 17505. The authors have no conflict of interest to report. Funding was generously provided by the Princeton University’s Department of Psychology, the Office of Undergraduate Research (OUR), and the Class of 1955 Senior Thesis Fund. 
+
+
+abstract: |
+  Data-driven antisemitism scales originated decades ago, but the field lacks current, theory-driven, validated measures of prejudices against Jewish people. The Scale of Antisemitic Stereotypes (SASS) updates methods and fits the Stereotype Content Model (SCM; Fiske, Cuddy, Glick, & Xu, 2002), which explains contemporary antisemitism in the United States as envious prejudice toward stereotypically high-competence, low-warmth Jews. American participants spontaneously generated excessive-competence and negative-warmth (e.g., “untrustworthy”) stereotypes. Exploratory and confirmatory factor analyses demonstrated a two-factor structure of warmth and competence. SASS scores correlated with right-wing authoritarianism, social dominance orientation, political conservatism, anti-Black racism, and anti-Asian-American stereotypes. SASS scores predicted implicitly associating Jews and low warmth, blatantly dehumanizing Jews, and systematically overestimating numbers of Jewish professionals. SASS predicts specific, relevant behavior: Participants who stereotyped Jews as low in warmth shared less with them in trust games. SASS not only advances basic science but also could guide interventions against antisemitism. 
+  
+  <!-- https://tinyurl.com/ybremelq -->
+  
+keywords          : "Antisemitism, stereotype content model (SCM), dehumanization, implicit attitudes, trust game"
+wordcount         : "X"
+
+#bibliography      : "r-references.bib"
+
+floatsintext      : no
+linenumbers       : no
+draft             : yes
+mask              : no
+
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+
+classoption       : "doc"
+output            : papaja::apa6_pdf
+---
+
+```{r setup, include = FALSE}
+library("papaja")
+library(GPArotation)
+library(tidyr)
+library(nFactors)
+library(tidyverse)
+library(haven)
+library(psych)
+library(plyr)
+library(Rmisc)
+library(coefficientalpha)
+library(lavaan)
+library(ggpubr)
+library(mvnormtest)
+library(QuantPsyc)
+library(ltm)
+library(easystats)
+library(performance)
+library(parameters)
+library(InteractionPoweR)
+library(magick)
+
+#r_refs("r-references.bib")
+```
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(42)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+# Study 6
+  The goals of study 6 are to determine (1) whether the 9-item SASS demonstrates a two-factor structure (warmth and competence) via confirmatory factor analysis (CFA), (2) whether SASS warmth and competence scores each predict different behaviors in economic games, (3) whether SASS scores can be experimentally manipulated via altering participants' perceptions of the entitativity of Jews in the U.S., and (4) whether warmth and competence stereotypes moderate the relationship between perceptions of entitativity and economic game behavior.
+  Study 4's exploratory factor analysis demonstrated that the 9-item SASS was comprised of two latent factors: warmth (e.g., "All things considered, Jewish people are untrustworthy"), and competence (e.g., Jewish people tend to be good with money). Study 6 uses CFA to confirm this factor structure with a new sample. 
+  The results of study 5 demonstrated that warmth-related antisemitic stereotypes, but not competence stereotypes, predicted trust game behavior. In study 6, we attempt not only to replicate this result, but also to demonstrate that competence-related antisemitic stereotypes uniquely predict behavior in a competence-relevant economic game situation. In the "puzzle game," participants are monetarily incentivized to guess how many puzzles their co-player will solve. Accurately guessing requires judging one's co-player's competence (i.e., their ability to solve the puzzles, and the agency to do so), but not warmth. Thus, we hypothesize that, in the puzzle game, participants' competence-related antisemitic stereotype endorsement will predict higher estimates of Jewish co-players' puzzle-solving. 
+  Thus far, we have treated SASS scores as an individual difference measure. In study 6, we attempt to affect SASS scores via an experimental manipulation. Entitativity, the extent to which a group is seen as a unified, homogeneous, cohesive whole (see Yzerbyt et al., 2004 for an overview) predicts viewing that group as powerful and threatening (Deprét & Fiske, 1999). Perceiving a group as highly entitative, which occurs when symbols or logos depict them, predicts viewing that group as more competent but less warm (Callahan & Ledgerwood, 2016). Experimentally manipulating entitativity by depicting group members as more homogeneous and unified exaggerates stereotype endorsements for disliked outgroups (Dang et al., 2018). That is, when people perceive an envied outgroup as more entitative (as opposed to  dissimilar or diffuse), they will rate that group as less warm and more competent. Consequently, we hypothesize that experimentally heightening participants' perceptions of U.S. Jews' entitativity will increase their endorsement of low-warmth and excessive-competence stereotypes.
+  It follows that we hypothesize that warmth and competence stereotype endorsement should moderate the relationships between entitativity perceptions and trust game and puzzle game behavior, respectively. That is, when U.S. Jews are depicted as more entitative, relative to when they are depicted as less entitative, participants will view them as less warm but more competent. Participants will then trust them less in the trust game and guess they will solve more puzzles. We hypothesize that, conditioned on perceived entitativity, wamrth and competence stereotype endorsements will predict participants' trust and puzzle game behaviors, respectively. We simulate this interaction in the figure below. 
+  
+```{r}
+set.seed(42)
+test_data = generate_interaction(
+  N = 350,  # sample size
+  r.x1.y = .2,    # correlation between x1 (entitativity condition) and y (economic game behavior)
+  r.x2.y =  .3,   # correlation between x2 (stereotype endorsement) and y (economic game behavior)
+  r.x1.x2 = .4,   # conservative estimate of correlation between x1 (entitativity condition) and x2 (stereotype endorsement)
+  r.x1x2.y = .15, # correlation between x1x2 (hypothesized interaction term) and y (economic game behavior)
+  k.x1 = 2,
+  adjust.correlations = TRUE
+) 
+
+plot_interaction(data = test_data)
+
+apa_table(test_data)
+```
+  X1 represents entitativity condition, where group 1 is the condition in which U.S. Jews are not depicted as entitative and group 2 is the condition in which U.S. Jews is depicted as entitative. X2 represents stereotype endorsement, while Y represents economic game behavior. 
+  
+  
+# Methods
+## Transparency and Openness
+  We report how we determined our sample size, all data exclusions, all manipulations, and all measures in the study, which follows JARS (Kazak, 2018). Of note, we treat the scale measurements used in this study as continuous variables, following literature convention and reviewer feedback. 
+ <!-- 21-word solution (Simmons, Nelson & Simonsohn, 2012; retrieved from http://ssrn.com/abstract=2160588) -->
+
+## Participants
+  Participants were Prolific users with a 95% or higher task acceptance rate who reported currently attending a university in the U.S. Inclusion criteria also included English language fluency. University students were chosen because the cover story for the experiment was a competition between teams of university students, where the teams vary in their homogeneity. Furthermore, university students' attitudes towards Jews became a national focus in 2023, so their level of antisemitic stereotype endorsement is worth assessing. We had sufficient funding for a sample size of N = 400. 
+  Exclusion criteria, all of which were pre-registered, included incomplete survey responses, failing attention checks 2 or more times, failing comprehension checks on the economic games 2 or more times, after repeated recaps and instructional clarifications, failing bot-catching reCAPTCHA validation checks, opting out of being included in the analysis (i.e., by responding “don’t include my data for analyses” to an effort check question. Participants who self-identified as Jewish, of whom there were two, were also excluded from analyses. 
+  We conducted a simulation-based power analysis using the InteractionPoweR package (Baranger et al., 2023). Correlations (Pearson's R) between stereotype endorsement and economic game behavior (let this be r.x2.y), between entitativity condition and stereotype endorsement (r.x1.x2) were conservatively estimated based on Walsh et al. (under review) and Dang et al. (2018), respectively. We calculated statistical power for a range of values [0.1, 0.5] of the correlation between entitativity condition and economic game behavior (r.x1.y) and the interaction term (r.x1.x2.y). This range was based on estimated derived from pilot data. 
+```{r}
+set.seed(42)
+library(InteractionPoweR)
+power_sim_test = power_interaction(n.iter = 1000,  # number of simulations
+                  alpha = 0.05,   # p-value
+                  N = 400,        # sample size
+                  r.x1.y = seq (.1, .5, by=.05),    # correlation between x1 (entitativity condition) and y (economic game behavior).
+                  r.x2.y =  .3,   # correlation between x2 (stereotype endorsement) and y (economic game behavior), estimated from Walsh et al. (under review). 
+                  r.x1.x2 = .4,   # conservative estimate of correlation between x1 (entitativity condition) and x2 (stereotype endorsement), from Dang et al. (2018). 
+                  r.x1x2.y = seq(.1,.5,by=.05), # correlation between x1x2 and y (range estimated from pilot data)
+                  k.x1 = 2, # 2 levels of entitativity condition
+                  detailed_results = TRUE
+)
+plot_power_curve(power_data = power_sim_test, # output from power_interaction()
+                 power_target = .8,        # the power we want to achieve 
+                 x = "r.x1x2.y", # x variable
+                 group = "r.x1.y"       # grouping variable
+)
+```
+Based on this power analysis, with an N of 400, we have at least 85% power to detect interaction effects of 0.15 or higher for r.x1.y (correlation between entitativity condition and trust game behavior) values ranging from 0.1 to 0.5. 
+
+## Materials
+  Materials include the 9-item SASS scale, divided into warmth and competence subscales (see Appendix D and summary table below), the antizionist antisemitism scale (AZAs; Allington & Hirsh, 2019), and the RWA and SDO measures used previously. Additionally, one question, "When we think about the world, it comes down to the oppressor vs the oppressed," assessed participants' "oppression mindset," a facet of simplistic attributions about social power (Pomerantz, under review).A four-question entitativity scale (Callahan & Ledgerwood, 2016) served as an entitativity manipulation check.
+
+## Procedure
+  Participants were told that our lab is studying how well different kinds of teams of university students perform in economic games. They were assigned to a team of 3 students, which was matched  against another team of 3. Participants are told that they will be playing against one student from another team in two economic games (trust game and puzzle game). 
+  Participants’ teammates were recruited prior to the study and are the same for every participant. Participants saw one fact about the identities of their teammates (e.g., "I’m a woman in STEM.") in addition to their university, and then were asked to share one aspect of their own identity and where they attend university. 
+  Participants were then be shown the opposing team, which varies by experimental conditions. In the low entitativity condition, the opposing team contained three players, one of whom was a Jewish student at Yeshiva University. In the high entitativity condition. the opposing team contained three Jewish players, all from Yeshiva. In both conditions, participants were matched with the Jewish player (who was previously recruited) to play the two economic games. The experimental manipulation is whether that Jewish person was part of a group of Jews, or was a singular Jewish person. 
+  Participants played a round of the incentivized trust game as well as a round of the incentivized competence puzzle game, with their matched Jewish player. The order in which participants played the gameswas randomized. Participants did not receive feedback between games, or between rounds of a game, on the performance of their co-player so as not to influence subsequent trials. In the trust game, the dependent variable is how much money (out of $1) participants share with their Jewish co-player. In the puzzle game, the dependent variable is how many puzzles (between zero and five) pariticipants guess their Jewish co-player will solve. Three participants failed two comprehension checks, and were excluded from the analysis.
+  Participants then completed the 9-item scale of antisemitic stereotypes an entitativity manipulation check, RWA and SDO measures, and the AzA scale (antizionist antisemitism). 
+  
+
+## Data analysis
+ Data were analyzed using R. This study's design and its analyses were preregistered. All data, analysis code, preregistration information, and research materials are available at https://osf.io/kf8r7/?view_only=432db566188642258b1c3bf51a71aa55.
+
+# Results
+
+## Antisemitism Scale Summary Statistics
+```{r}
+#Load in data set
+EntGames <- read.csv("Study 6.csv")  #"Entitativity Games
+
+#Scale of Antisemitic Stereotypes (SASS)
+SASS <- data.frame(EntGames[,44:52])
+#Summary Statistics - Full Scale
+summary.data.frame(SASS)
+SASSAlpha <- cronbach.alpha(SASS, CI = TRUE)
+
+#Sub scales based on Stereotype Content Model Dimensions
+Warmth <- SASS %>%
+    dplyr::select("Jewish.people.are.often.very.rude.",
+                  "Jewish.people.tend.to.complain.a.lot.",
+                  "All.things.considered..Jewish.people.are.untrustworthy.",
+                    "Jewish.people.can.be.sneaky.",
+                    "When.they.feel.slighted..Jewish.people.will.be.vengeful.",
+                    "Jewish.people.tend.to.influence.the.media.")
+Competence <- SASS %>%
+  dplyr::select("Jewish.people.tend.to.be.good.with.money.",
+         "When.it.comes.to.education..Jewish.people.tend.to.be.overachievers.",
+         "On.the.whole..Jewish.people.are.loyal.to.Israel.")
+WarmthAlpha <- cronbach.alpha(Warmth, standardized = TRUE, CI = TRUE)
+CompAlpha <- cronbach.alpha(Competence, standardized = TRUE, CI = TRUE)
+WarmthAlpha
+CompAlpha
+
+Rude <- mean(SASS$Jewish.people.are.often.very.rude.)
+Complain <- mean(SASS$Jewish.people.tend.to.complain.a.lot.)
+Untrustworthy <- mean(SASS$All.things.considered..Jewish.people.are.untrustworthy.)
+Sneaky <- mean(SASS$Jewish.people.can.be.sneaky.)
+Vengeful <- mean(SASS$When.they.feel.slighted..Jewish.people.will.be.vengeful.)
+Media <- mean(SASS$Jewish.people.tend.to.influence.the.media.)
+Money <- mean(SASS$Jewish.people.tend.to.be.good.with.money.)
+Education <- mean(SASS$When.it.comes.to.education..Jewish.people.tend.to.be.overachievers.)
+Israel <- mean(SASS$On.the.whole..Jewish.people.are.loyal.to.Israel.)
+
+apa_num(WarmthAlpha)
+apa_num(CompAlpha)
+apa_num(SASSAlpha)
+
+```
+
+
+The full SASS scale had a Cronbach's alpha of `r apa_num(SASSAlpha)`.
+The warmth subscale had a Cronbach's alpha of `r apa_num(WarmthAlpha)`.
+The competence subscale had a Cronbach's alpha of `r apa_num(CompAlpha)`.
+
+Means and standard deviations for the 9-item SASS (scale of antisemitic stereotypes) appear in the following table. 
+```{r, echo=FALSE}
+
+SASS6_table <- structure(
+  list(
+    Questions = c(
+      "Jewish people are often very rude",
+      "Jewish people tend to complain a lot",
+      "All things considered, Jewish people are untrustworthy",
+      "Jewish people can be sneaky",
+      "When they feel slighted, Jewish people will be vengeful",
+      "Jewish people tend to influence the media",
+      "Jewish people tend to be good with money",
+      "When it comes to education, Jewish people tend to be overachievers",
+      "On the whole, Jewish people are loyal to Israel"
+    ),
+    `Mean` = c(mean(SASS$Jewish.people.are.often.very.rude.), mean(SASS$Jewish.people.tend.to.complain.a.lot.), mean(SASS$All.things.considered..Jewish.people.are.untrustworthy.), mean(SASS$Jewish.people.can.be.sneaky.), mean(SASS$When.they.feel.slighted..Jewish.people.will.be.vengeful.), mean(SASS$Jewish.people.tend.to.influence.the.media.), mean(SASS$Jewish.people.tend.to.be.good.with.money.), mean(SASS$When.it.comes.to.education..Jewish.people.tend.to.be.overachievers.), mean(SASS$On.the.whole..Jewish.people.are.loyal.to.Israel.)),
+    `Median` = c(median(SASS$Jewish.people.are.often.very.rude.), median(SASS$Jewish.people.tend.to.complain.a.lot.), median(SASS$All.things.considered..Jewish.people.are.untrustworthy.), median(SASS$Jewish.people.can.be.sneaky.), median(SASS$When.they.feel.slighted..Jewish.people.will.be.vengeful.), median(SASS$Jewish.people.tend.to.influence.the.media.), median(SASS$Jewish.people.tend.to.be.good.with.money.), median(SASS$When.it.comes.to.education..Jewish.people.tend.to.be.overachievers.), median(SASS$On.the.whole..Jewish.people.are.loyal.to.Israel.)),
+    `SD` = c(sd(SASS$Jewish.people.are.often.very.rude.), sd(SASS$Jewish.people.tend.to.complain.a.lot.), sd(SASS$All.things.considered..Jewish.people.are.untrustworthy.), sd(SASS$Jewish.people.can.be.sneaky.), sd(SASS$When.they.feel.slighted..Jewish.people.will.be.vengeful.), sd(SASS$Jewish.people.tend.to.influence.the.media.), sd(SASS$Jewish.people.tend.to.be.good.with.money.), sd(SASS$When.it.comes.to.education..Jewish.people.tend.to.be.overachievers.), sd(SASS$On.the.whole..Jewish.people.are.loyal.to.Israel.))
+  ),
+  class = "data.frame",
+  row.names = c(NA, 9L))
+  SASS6_table[, -1] <- apa_num(SASS6_table[, -1])
+
+  apa_table(
+  SASS6_table,
+  caption = "Scale of Antisemitic Stereotypes Descriptive Statistics - Study 6",
+  col_spanners = list("Score" = c(1,4)),
+  note = "Item scores are scored 0-5 ('strongly disagree' - strongly agree')",
+  landscape = FALSE
+)
+  
+```
+
+## Study 6 Confirmatory Factor Analysis
+
+We next perform Confirmatory Factor Analysis (CFA). 
+```{r}
+#Load required packages
+library(psych)
+library(plyr)
+library(Rmisc)
+library(coefficientalpha)
+library(lavaan)
+library(dplyr)
+library(ggpubr)
+library(mvnormtest)
+library(QuantPsyc)
+
+#Marta's Multivariate Normality Test
+mult.norm(SASS)$mult.test
+
+#Two-factor model specification and fit
+TF.model <- ' warmth =~ Jewish.people.are.often.very.rude. +
+                  Jewish.people.tend.to.complain.a.lot. +
+                  All.things.considered..Jewish.people.are.untrustworthy. +
+                    Jewish.people.can.be.sneaky. +
+                    When.they.feel.slighted..Jewish.people.will.be.vengeful. +
+                    Jewish.people.tend.to.influence.the.media. 
+              competence =~  Jewish.people.tend.to.be.good.with.money. +
+         When.it.comes.to.education..Jewish.people.tend.to.be.overachievers. +
+         On.the.whole..Jewish.people.are.loyal.to.Israel.'
+
+fitTF <-cfa(TF.model, data = SASS, estimator="MLR")
+summary(fitTF, fit.measures = TRUE)
+fitTF.scaled<-c("chisq.scaled", "cfi.scaled", "tli.scaled", "rmsea.scaled", "aic", "bic")  
+fitmeasures(fitTF, fitTF.scaled)
+
+#One-factor model specification and fit
+OF.model <- ' all =~ Jewish.people.are.often.very.rude. +
+                  Jewish.people.tend.to.complain.a.lot. +
+                  All.things.considered..Jewish.people.are.untrustworthy. +
+                    Jewish.people.can.be.sneaky. +
+                    When.they.feel.slighted..Jewish.people.will.be.vengeful. +
+                    Jewish.people.tend.to.influence.the.media. + Jewish.people.tend.to.be.good.with.money. +
+         When.it.comes.to.education..Jewish.people.tend.to.be.overachievers. +
+         On.the.whole..Jewish.people.are.loyal.to.Israel. '
+fitOF <-cfa(OF.model, data = SASS, estimator="MLR")
+summary(fitOF, fit.measures = TRUE)
+fitOF.scaled<-c("chisq.scaled", "cfi.scaled", "tli.scaled", "rmsea.scaled", "aic", "bic")  
+fitmeasures(fitOF, fitOF.scaled)
+
+#Factor Loadings for 2-Factor Model
+SASS_CFA <- psych::fa(SASS, nfactors = 2, rotate="oblimin", fm="pa") %>% model_parameters(sort = TRUE, threshold = "max")
+
+SASS_CFA
+
+
+```
+The two-factor model outperformed the one-factor model in terms of goodness of fit. 
+
+## Demography of SASS Scores
+We next compare SASS scores by racial/ethnic groups. 
+```{r}
+#Comparing SASS Scores by Race and Ethnicity
+library(emmeans)
+EntGamesRace <- filter(EntGames, Race_1 == "White/European" | Race_1 == "Black/African" | Race_1 == "Asian" | Race_1 == "Hispanic Non-White")
+lmRace <- lm(EntGamesRace$SASS.Score ~ EntGamesRace$Race_1)
+summary(lmRace)
+Race.emm <- emmeans(lmRace, pairwise ~ Race_1, adjust = 'tukey')
+print(Race.emm)
+apa_print(lmRace)
+recall_anova_results_race <- apa_print(lmRace, es = "pes", in_paren = TRUE)
+```
+Asian participants and Black participants tended to score higher on the antisemitism scale than White participants (`r recall_anova_results_race`)
+
+## SASS Scores Linear Models
+We then construct linear models to assess the variation in SASS scores.
+```{r}
+fitA <- lm(SASS.Score ~ Gender, data = EntGames)
+summary(fitA)
+BIC(fitA)
+
+fitB <- lm(SASS.Score ~ Gender + Condition, data = EntGames)
+summary(fitB)
+BIC(fitB)
+anova(fitA, fitB)
+#Fit B is no improvement
+
+fitC <- lm(SASS.Score ~ Gender + Entitativity, data = EntGames)
+summary(fitC)
+BIC(fitC)
+anova(fitA, fitC)
+#Fit C is an improvement over fit A
+
+fitD <- lm(SASS.Score ~ Gender + Entitativity + Political.Ideology, data = EntGames)
+summary(fitD)
+BIC(fitD)
+anova(fitC, fitD)
+#Fit D is an improvement over fit C
+
+fitE <- lm(SASS.Score ~ Gender + Entitativity + Political.Ideology + AZAs, data = EntGames)
+summary(fitE)
+BIC(fitE)
+anova(fitD, fitE)
+#Fit E is an improvement over Fit D
+
+fitF <- lm(SASS.Score ~ Gender + Entitativity + Political.Ideology + AZAs + RWA.Score, data = EntGames)
+summary(fitF)
+BIC(fitF)
+anova(fitE, fitF)
+#Fit F is an improvement over Fit E
+
+fitG <- lm(SASS.Score ~ Gender + Entitativity + Political.Ideology + AZAs + RWA.Score + SDO.Score, data = EntGames)
+summary(fitG)
+BIC(fitG)
+anova(fitF, fitG)
+#Fit G is an improvement over Fit F
+
+fitH <- lm(SASS.Score ~ Gender + Entitativity + Political.Ideology + AZAs + RWA.Score + SDO.Score + X.When.we.think.about.the.world..it.comes.down.to.the.oppressor.vs.the.oppressed.., data = EntGames)
+summary(fitH)
+BIC(fitH)
+anova(fitG, fitH)
+#Fit H is an improvement over fit G
+recall_anova_results_SASS <- apa_print(fitH, es = "pes", in_paren = TRUE)
+
+```
+The optimal model appears to be fit H (`r recall_anova_results_SASS`).
+
+## Linearity Assumptions
+We then check linearity assumptions for the SASS model (i.e., fitH). 
+```{r fig.height=12, fig.width=12}
+library(performance)
+
+#Insert code
+performance::check_model(fitH)
+```
+### Linearity
+  Plotting residuals against fitted values, there is random scattering around zero. However, there is a slight pattern whereby the residuals increase as the fitted values are less than 10 or above 30. Linearity assumptions are somewhat met. 
+
+###Normality
+  The Q-Q plot, which plots sample quantile deviations vs standard normal distribution quantiles, seems to support the normality assumption: there are no zigzags or heavy tails, and only a slight s-shape. 
+
+###Homoscedasticity
+  In the Homogeneity of variance plot, the variance of the errors increases. The width of the band is also not constant,  The homoscedasticity assumption is not met very well. 
+
+### Multicolinearity
+  The variance inflation factors for each of the predictors is low (<3),meaning Tolerance is high, indicating that the predictors are not too highly correlated. 
+
+### Influential Points
+  Plotting Std. residuals vs leverage, we see clustering around 0 that remains well within the contour lines. 
+
+### Posterior Predictive Check
+  The observed data in the density plot resembles the distribution of model-predicted data fairly well. 
+
+## Economic Games Linear Models
+  We then construct linear models for the economic games. Unfortunately, the entitativity manipulation demonstrated no effect on participants' perceptions of Jews' entitativity. Since the manipulation was unsuccessful, we use participants' ratings of Jews' entitativity as a predictor for economic game behavior.
+```{r}
+
+# T-Test Comparing Trust and Puzzle game responses by entitativity condition
+t.test(EntGames$NonEnt_TG, EntGames$Ent_TG, paired = FALSE)
+t.test(EntGames$Puzzle_NonEnt, EntGames$Puzzle_Ent, paired = FALSE)
+
+#Manipulation check
+EntModel <- lm(Entitativity ~ Condition, data = EntGames)
+summary(EntModel)
+#There is no evidence of an effect of entitativity condition on perceptions of entitativity.
+
+
+library(lme4)  # for mixed-effects models
+library(lmerTest)  # for p-values in mixed-effects models
+#Trust Game Models
+
+#Baseline Model
+fit0 <- lm(TG_All ~ SASS.Warmth.Score, data = EntGames) #TG stands for "trust games."
+summary(fit0)
+BIC(fit0)
+
+#Warmth and Competence Model
+fit1 <- lm(TG_All ~ SASS.Warmth.Score + SASS.Competence.Score, data = EntGames)
+summary(fit1)
+BIC(fit1)
+anova(fit0, fit1)
+#Fit 1 is no better than fit 0
+
+#Warmth and Entitativity Model
+fit2 <- lm(TG_All ~ SASS.Warmth.Score  + Entitativity, data = EntGames)
+summary(fit2)
+BIC(fit2)
+anova(fit0, fit2)
+#Fit 2 is no improvement
+
+#Warmth and Competence Interaction
+fit3 <- lm(TG_All ~ SASS.Warmth.Score + SASS.Warmth.Score*SASS.Competence.Score, data = EntGames)
+summary(fit3)
+BIC(fit3)
+anova(fit0, fit3)
+#Fit 3 is not significantly better than fit 0
+
+#Entitativity and Warmth Interaction
+fit4 <- lm(TG_All ~ SASS.Warmth.Score + SASS.Warmth.Score*Entitativity + Entitativity, data = EntGames)
+summary(fit4)
+BIC(fit4)
+anova(fit0, fit4)
+#Fit 4 is no better than fit 0
+recall_anova_results_TG <- apa_print(fit0, es = "pes", in_paren = TRUE)
+
+#Puzzle Game Models
+
+#Baseline Model
+fit5 <- lm(Puzzle_All ~ SASS.Competence.Score, data = EntGames)
+summary(fit5)
+BIC(fit5)
+
+#Warmth and Competence Model
+fit6 <- lm(Puzzle_All ~ SASS.Warmth.Score + SASS.Competence.Score, data = EntGames)
+summary(fit6)
+BIC(fit6)
+anova(fit5, fit6)
+#Fit 6 is  better than fit 5
+
+#Just Warmth Model
+fit7 <- lm(Puzzle_All ~ SASS.Warmth.Score, data = EntGames)
+summary(fit7)
+BIC(fit7)
+anova(fit6, fit7)
+#Including competence score does not improve the model, making fit 7 the best so far.
+
+#Warmth and Entitativity Model
+fit8 <- lm(Puzzle_All ~ SASS.Warmth.Score  + Entitativity, data = EntGames)
+summary(fit8)
+BIC(fit8)
+anova(fit7, fit8)
+#Fit 8 is no improvement
+
+#Warmth and Competence Interaction
+fit9 <- lm(Puzzle_All ~ SASS.Warmth.Score + SASS.Warmth.Score*SASS.Competence.Score, data = EntGames)
+summary(fit9)
+BIC(fit9)
+anova(fit7, fit9)
+#Fit 9 is not significantly better than fit 7
+
+#Entitativity and Warmth Interaction
+fit10 <- lm(Puzzle_All ~ SASS.Warmth.Score + SASS.Warmth.Score*Entitativity + Entitativity, data = EntGames)
+summary(fit10)
+BIC(fit10)
+anova(fit7, fit10)
+#Fit 10 is no better than fit 7
+recall_anova_results_Puzzle <- apa_print(fit7, es = "pes", in_paren = TRUE)
+
+```
+  For the trust game, the optimal model appears to be fit 0 (`r recall_anova_results_TG`). For the puzzle game, the optimal model appears to be fit 7 (`r recall_anova_results_Puzzle`). Since fit 7 is not significantly different from the null model, we find no evidence that either warmth or competence stereotypes predict puzzle game behavior.
+
+## Linearity Assumptions
+We then check linearity assumptions for the trust game model (i.e., fit0). 
+```{r fig.height=12, fig.width=12}
+library(performance)
+
+#Insert code
+performance::check_model(fit0)
+```
+### Linearity
+  Plotting residuals against fitted values, there is not random scattering around zero. There are clear patterns of bands of decreasing residuals as fitted values increase. Linearity assumptions are not met. 
+
+### Normality
+  The Q-Q plot, which plots sample quantile deviations vs standard normal distribution quantiles, does not seem to support the normality assumption: there are  zigzags and heavy tails. 
+
+### Homoscedasticity
+  In the Homogeneity of variance plot, the variance of the errors is not constant. That is, the error varies considerably as the predictors change. The homoscedasticity assumption is not  met. 
+
+### Influential Points
+  Plotting Std. residuals vs leverage, we see clustering around 0 that remains well within the contour lines. 
+
+### Posterior Predictive Check
+  The observed data in the density plot appears bimodal and does not resemble the distribution of model-predicted data fairly well.
+
+
+## Correlations
+```{r}
+#Correlation between warmth and competence factors
+res1 <-cor.test(EntGames$SASS.Warmth.Score, EntGames$SASS.Competence.Score,  method = "pearson", exact = FALSE)
+res1
+
+#Correlation between SASS and RWA
+res2 <-cor.test(EntGames$SASS.Score, EntGames$RWA.Score,  method = "pearson", exact = FALSE)
+res2
+
+#Correlation between SASS and SDO
+res3 <-cor.test(EntGames$SASS.Score, EntGames$SDO.Score,  method = "pearson", exact = FALSE)
+res3
+
+#Correlation between SASS and AZAs
+res4 <-cor.test(EntGames$SASS.Score, EntGames$AZAs,  method = "pearson", exact = FALSE)
+res4
+
+#Correlation between SASS and Entitativity
+res5 <-cor.test(EntGames$SASS.Score, EntGames$Entitativity,  method = "pearson", exact = FALSE)
+res5
+
+res6 <-cor.test(EntGames$Puzzle_All, EntGames$Entitativity,  method = "pearson", exact = FALSE)
+res6
+
+```
+
+# Discussion
+  SASS scores varied by racial/ethnic group. Entitativity (treated as a continuous variable), political ideology, antizionist antisemitism, social dominance orientation, and "oppression mindset"  Perceiving Jews as more entitative predicted greater endorsement of antisemitic stereotypes, as did identifying more strongly as a political conservative. Interestingly, higher agreement with the idea that the world is comprised of oppressed an oppressors predicted higher SASS scores. The experimental entitativity manipulation did not appear to affect participants' appraisal of Jews' entitativity, and had no effect on SASS scores or economic game behavior.
+  Only SASS warmth subscale scores predicted trust game behavior. No other measure explained more variance of trust game behavior. No predictors explained variation in puzzle game estimations, meaning no stereotypes predicted puzzle game behavior (i.e., the number of puzzles participants estimated Jewish co-players would solve). 
+
+\newpage
+
+# References
+Allington, Daniel & Hirsh, David. (2019). The AzAs (Antizionist Antisemitism) Scale: Measuring Antisemitism as Expressed in Relation to Israel and Its Supporters. Journal of Contemporary Antisemitism. 2. 43-51. 10.26613/jca/2.2.32. 
+
+Baranger DAA, Finsaas MC, Goldstein BL, Vize CE, Lynam DR, Olino TM. (2023). Tutorial: Power Analyses for Interaction Effects in Cross-Sectional Regressions. Advances in Methods and Practices in Psychological Science, 6(3). doi:10.1177/25152459231187531 
+
+Callahan, S. P., & Ledgerwood, A. (2016). On the psychological function of flags and logos: Group identity symbols increase perceived entitativity. Journal of Personality and Social Psychology, 110(4), 528–550. https://doi.org/10.1037/pspi0000047
+
+Dang, J., Liu, L., Ren, D., & Su, Q. (2018). Polarization and positivity effects: Divergent roles of group entitativity in warmth and competence judgments. Journal of Experimental Social Psychology, 74, 74–84. https://doi.org/10.1016/j.jesp.2017.09.003
+
+de La Trobe, A. V. T., Brown, G. D. A., & Walasek, L. (2024). Multiple Reputations: Selective Attention to Competence and Character. Personality and Social Psychology Bulletin, 0(0). https://doi.org/10.1177/01461672241301116
+
+Dépret, E., & Fiske, S. T. (1999). Perceiving the powerful: Intriguing individuals versus threatening groups. Journal of Experimental Social Psychology, 35(5), 461–480. https://doi.org/10.1006/jesp.1999.1380
+
+Pomerantz, A. (under review). Simplistic attributions of social power. 
+
+Yzerbyt, V., Judd, C. M., & Corneille, O. (2004). Perceived variability, entitativity, and essentialism: Introduction and overview.
+
+#::: {#refs custom-style="Bibliography"}
+#:::
